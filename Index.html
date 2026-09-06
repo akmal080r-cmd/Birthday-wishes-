@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You ❤️</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            overflow: hidden; 
+            color: #4a1c22;
+            background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), url('bg.jpg') no-repeat center center/cover;
+            background-color: #ffccd5;
+        }
+        .emoji-bg { position: absolute; font-size: 25px; animation: floatUp 7s linear infinite; z-index: 1; opacity: 0.7; bottom: -50px; pointer-events: none; }
+        @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 20% { opacity: 0.7; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.88); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            padding: 30px 25px; 
+            border-radius: 28px; 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); 
+            text-align: center; 
+            width: 85%; 
+            max-width: 360px; 
+            position: relative; 
+            z-index: 10; 
+            border: 1.5px solid rgba(255, 255, 255, 0.7); 
+            min-height: 250px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+        }
+        h1 { color: #ff2a55; font-size: 1.6rem; margin-bottom: 12px; }
+        .text-box { font-size: 1.15rem; line-height: 1.6; color: #222; min-height: 70px; }
+        .btn { 
+            background: linear-gradient(135deg, #ff4d6d, #ff2a55); 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 15px; 
+            font-size: 1rem; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%; 
+            margin-top: 15px; 
+            box-shadow: 0 4px 15px rgba(255, 42, 85, 0.4);
+            transition: 0.2s;
+        }
+        .btn:active { transform: scale(0.97); }
+        .hidden { display: none !important; }
+        #pageTimer { font-size: 1.25rem; color: #ff2a55; font-style: italic; font-weight: bold; margin-top: 15px; }
+        .input-box { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #ff4d6d; font-size: 1.05rem; text-align: center; outline: none; margin-top: 15px; color: #222; background: rgba(255, 255, 255, 0.95); }
+        .err-msg { color: #d00000; font-size: 0.9rem; margin-top: 8px; min-height: 20px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Neethanadi-MassTamilan.fm.mp3#t=25" type="audio/mpeg">
+    </audio>
+
+    <div class="card">
+        <div id="s_loading" class="hidden">
+            <h1>Wait for it... ❤️</h1>
+            <div id="pageTimer">Opening in... 5s</div>
+        </div>
+
+        <div id="s1">
+            <h1>Hi ❤️</h1>
+            <p style="color: #444; margin-bottom: 20px; font-size: 1.05rem;">Something special is waiting for you...</p>
+            <button class="btn" onclick="startPageTimer(2)">Click here</button>
+        </div>
+
+        <div id="s2" class="hidden">
+            <h1>Hey... 🌸</h1>
+            <div id="txt2" class="text-box"></div>
+            <p style="color: #555; margin-top: 10px; font-size: 0.95rem;">Unakku background-la song venuma? 🎵</p>
+            <button class="btn" onclick="playMusicAndNext()">Click here for music & Next ➡️</button>
+        </div>
+
+        <div id="s3" class="hidden">
+            <h2 style="color: #666; font-weight: 400;">...... 🤔</h2>
+        </div>
+
+        <div id="s4" class="hidden">
+            <h1>Who is this? 🙈</h1>
+            <p style="color: #444; font-size: 0.95rem;">Enter your cute name to unlock:</p>
+            <input type="text" id="nameInput" class="input-box" placeholder="Your name...">
+            <div id="errMsg" class="err-msg"></div>
+            <button class="btn" onclick="checkName()">Unlock Wish 🎁</button>
+        </div>
+
+        <div id="s5" class="hidden">
+            <h1 style="font-size: 1.7rem;">🎉 Happy Birthday! 🎉</h1>
+            <div id="txt5" class="text-box" style="font-weight: bold; color: #ff1443;"></div>
+            <div style="font-size: 40px; margin-top: 15px;">🎂🎁🌹💖</div>
+        </div>
+    </div>
+
+    <script>
+        const emojis = ['❤️', '🎂', '💖', '✨', '🌹'];
+        for (let i = 0; i < 20; i++) {
+            let e = document.createElement('div');
+            e.className = 'emoji-bg';
+            e.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            e.style.left = Math.random() * 100 + 'vw';
+            e.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            document.body.appendChild(e);
+        }
+
+        function typeWriter(text, elementId, speed = 50) {
+            let i = 0;
+            let elem = document.getElementById(elementId);
+            elem.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    elem.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        const messages = {
+            txt2: "Inime eppome smile pannite irukanum edhukagavum alaugha koodathu because your strong girl ✨💪",
+            txt5: "many more happy returns of the day thangoooooooooooo 😊💝💋"
+        };
+
+        function startPageTimer(nextSlide) {
+            document.querySelectorAll('.card > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById('s_loading').classList.remove('hidden');
+            
+            let count = 5;
+            document.getElementById('pageTimer').innerText = "Opening in... " + count + "s";
+            
+            let countdown = setInterval(() => {
+                count--;
+                document.getElementById('pageTimer').innerText = "Opening in... " + count + "s";
+                if(count <= 0) {
+                    clearInterval(countdown);
+                    document.getElementById('s_loading').classList.add('hidden');
+                    document.getElementById('s' + nextSlide).classList.remove('hidden');
+                    
+                    if (messages['txt' + nextSlide]) {
+                        typeWriter(messages['txt' + nextSlide], 'txt' + nextSlide);
+                    }
+                }
+            }, 1000);
+        }
+
+        function playMusicAndNext() {
+            let music = document.getElementById('bgMusic');
+            music.play().catch(e => console.log("Audio play error:", e));
+            goToBlankSlide();
+        }
+
+        function goToBlankSlide() {
+            document.querySelectorAll('.card > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById('s3').classList.remove('hidden');
+
+            setTimeout(() => {
+                triggerConfetti();
+                document.getElementById('s3').classList.add('hidden');
+                document.getElementById('s4').classList.remove('hidden');
+            }, 5000);
+        }
+
+        function checkName() {
+            let input = document.getElementById('nameInput').value.trim().toLowerCase();
+            let err = document.getElementById('errMsg');
+            
+            if (input === 'apsar banu' || input === 'apsara') {
+                err.innerText = '';
+                document.getElementById('s4').classList.add('hidden');
+                document.getElementById('s5').classList.remove('hidden');
+                triggerConfetti();
+                typeWriter(messages.txt5, 'txt5', 45);
+            } else if(input === '') {
+                err.innerText = 'Name-a enter pannu thangom! 🙈';
+            } else {
+                err.innerText = 'Hey, correct name type pannu! ❤️';
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 6,
+                    angle: 60,
+                    spread: 60,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 6,
+                    angle: 120,
+                    spread: 60,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+    </script>
+</body>
+</html>
