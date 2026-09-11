@@ -1,3 +1,5 @@
+
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +25,7 @@
         @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 20% { opacity: 0.7; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
         
         .card { 
-            background: rgba(255, 255, 255, 0.88); 
+            background: rgba(255, 255, 255, 0.9); 
             backdrop-filter: blur(12px); 
             -webkit-backdrop-filter: blur(12px);
             padding: 30px 25px; 
@@ -61,38 +63,65 @@
         #pageTimer { font-size: 1.25rem; color: #ff2a55; font-style: italic; font-weight: bold; margin-top: 15px; }
         .input-box { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #ff4d6d; font-size: 1.05rem; text-align: center; outline: none; margin-top: 15px; color: #222; background: rgba(255, 255, 255, 0.95); }
         .err-msg { color: #d00000; font-size: 0.9rem; margin-top: 8px; min-height: 20px; font-weight: 500; }
+        
+        .spinner {
+            width: 38px;
+            height: 38px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff2a55;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 10px auto 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
+    <!-- Background Music -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="Neethanadi-MassTamilan.fm.mp3#t=25" type="audio/mpeg">
+        <source src="Neethanadi-MassTamilan.fm.mp3" type="audio/mpeg">
     </audio>
 
     <div class="card">
+        <!-- Suspense Countdown Slide -->
         <div id="s_loading" class="hidden">
             <h1>Wait for it... ❤️</h1>
             <div id="pageTimer">Opening in... 5s</div>
         </div>
 
+        <!-- Slide 1: Intro -->
         <div id="s1">
             <h1>Hi ❤️</h1>
-            <p style="color: #444; margin-bottom: 20px; font-size: 1.05rem;">Something special is waiting for you...</p>
-            <button class="btn" onclick="startPageTimer(2)">Click here</button>
+            <p style="color: #444; margin-bottom: 20px; font-size: 1.1rem; font-weight: 500;">This is for you...</p>
+            <button class="btn" onclick="goToSlide(2)">Click here</button>
         </div>
 
+        <!-- Slide 2: Funny Teasing About Song -->
         <div id="s2" class="hidden">
-            <h1>Hey... 🌸</h1>
-            <div id="txt2" class="text-box"></div>
-            <p style="color: #555; margin-top: 10px; font-size: 0.95rem;">Unakku background-la song venuma? 🎵</p>
-            <button class="btn" onclick="playMusicAndNext()">Click here for music & Next ➡️</button>
+            <h1>Enna Paakuriya? 😜</h1>
+            <p style="color: #333; font-size: 1.05rem; line-height: 1.6; margin-bottom: 15px;">
+                Enna song vara matidhu nu paakiriya? Anniku vandhuchu inniku varla nu yosikiriya... 🤭
+            </p>
+            <button class="btn" onclick="startMusicAndNext()">Click here for song 🎶</button>
         </div>
 
+        <!-- Slide 3: Sweet Strong Girl Message -->
         <div id="s3" class="hidden">
-            <h2 style="color: #666; font-weight: 400;">...... 🤔</h2>
+            <h1>Hey... 🌸</h1>
+            <div id="txt3" class="text-box"></div>
+            <button class="btn" onclick="goToBlankSlide()">Next ➡️</button>
         </div>
 
+        <!-- Slide 4: Funny Prank Error Slide -->
         <div id="s4" class="hidden">
+            <div class="spinner"></div>
+            <h2 style="color: #e63946; font-size: 1.3rem; margin-bottom: 8px;">Loading surprise... ⏳</h2>
+            <p style="color: #555; font-size: 1rem; line-height: 1.5;">Wait, connection lost... illa illa unoda cute smile paathu system hang aaiduchu 🤭</p>
+        </div>
+
+        <!-- Slide 5: Name Input Verification -->
+        <div id="s5" class="hidden">
             <h1>Who is this? 🙈</h1>
             <p style="color: #444; font-size: 0.95rem;">Enter your cute name to unlock:</p>
             <input type="text" id="nameInput" class="input-box" placeholder="Your name...">
@@ -100,13 +129,31 @@
             <button class="btn" onclick="checkName()">Unlock Wish 🎁</button>
         </div>
 
-        <div id="s5" class="hidden">
+        <!-- Slide 6: First Wish -->
+        <div id="s6" class="hidden">
+            <h1 style="font-size: 1.6rem;">🎉 Special Wish 🎉</h1>
+            <div id="txt6" class="text-box" style="font-weight: bold; color: #ff1443;"></div>
+            <div style="font-size: 35px; margin: 10px 0;">🎂🎁🌹</div>
+            <button class="btn" onclick="goToSlide7()">Next ➡️</button>
+        </div>
+
+        <!-- Slide 7: Gift Message -->
+        <div id="s7" class="hidden">
+            <h1>A Small Gift 🎁</h1>
+            <div id="txt7" class="text-box"></div>
+            <div style="font-size: 35px; margin: 10px 0;">✨🛍️💖</div>
+            <button class="btn" onclick="goToSlide8()">Next ➡️</button>
+        </div>
+
+        <!-- Slide 8: Grand Finale (Kutta Mailuu) -->
+        <div id="s8" class="hidden">
             <h1 style="font-size: 1.7rem;">🎉 Happy Birthday! 🎉</h1>
-            <div id="txt5" class="text-box" style="font-weight: bold; color: #ff1443;"></div>
-            <div style="font-size: 40px; margin-top: 15px;">🎂🎁🌹💖</div>
+            <div id="txt8" class="text-box" style="font-weight: bold; color: #ff1443; font-size: 1.25rem;"></div>
+            <div style="font-size: 40px; margin-top: 15px;">🥳🎉🎊💃💖</div>
         </div>
     </div>
 
+    <!-- Script Section -->
     <script>
         const emojis = ['❤️', '🎂', '💖', '✨', '🌹'];
         for (let i = 0; i < 20; i++) {
@@ -118,7 +165,7 @@
             document.body.appendChild(e);
         }
 
-        function typeWriter(text, elementId, speed = 50) {
+        function typeWriter(text, elementId, speed = 45) {
             let i = 0;
             let elem = document.getElementById(elementId);
             elem.innerHTML = '';
@@ -133,11 +180,29 @@
         }
 
         const messages = {
-            txt2: "Inime eppome smile pannite irukanum edhukagavum alaugha koodathu because your strong girl ✨💪",
-            txt5: "many more happy returns of the day thangoooooooooooo 😊💝💋"
+            txt3: "Inime eppome smile pannite irukanum edhukagavum alaugha koodathu because your strong girl ✨💪",
+            txt6: "many more happy returns of the day thangoooooooooooo 😊💝",
+            txt7: "Ennala mudinja gift unakku anupiruken, unakku pudikum nu ninaikuren 🎁✨",
+            txt8: "One more time happy birthday di kutta mailuu 🎉😊"
         };
 
-        function startPageTimer(nextSlide) {
+        function goToSlide(slideNum) {
+            document.querySelectorAll('.card > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById('s' + slideNum).classList.remove('hidden');
+        }
+
+        function startMusicAndNext() {
+            let music = document.getElementById('bgMusic');
+            try {
+                music.currentTime = 25;
+            } catch(e) {}
+            music.play().then(() => {
+                console.log("Audio playing");
+            }).catch(e => {
+                console.log("Audio play fallback:", e);
+                music.play();
+            });
+
             document.querySelectorAll('.card > div').forEach(div => div.classList.add('hidden'));
             document.getElementById('s_loading').classList.remove('hidden');
             
@@ -150,29 +215,20 @@
                 if(count <= 0) {
                     clearInterval(countdown);
                     document.getElementById('s_loading').classList.add('hidden');
-                    document.getElementById('s' + nextSlide).classList.remove('hidden');
-                    
-                    if (messages['txt' + nextSlide]) {
-                        typeWriter(messages['txt' + nextSlide], 'txt' + nextSlide);
-                    }
+                    document.getElementById('s3').classList.remove('hidden');
+                    typeWriter(messages.txt3, 'txt3');
                 }
             }, 1000);
         }
 
-        function playMusicAndNext() {
-            let music = document.getElementById('bgMusic');
-            music.play().catch(e => console.log("Audio play error:", e));
-            goToBlankSlide();
-        }
-
         function goToBlankSlide() {
             document.querySelectorAll('.card > div').forEach(div => div.classList.add('hidden'));
-            document.getElementById('s3').classList.remove('hidden');
+            document.getElementById('s4').classList.remove('hidden');
 
             setTimeout(() => {
                 triggerConfetti();
-                document.getElementById('s3').classList.add('hidden');
-                document.getElementById('s4').classList.remove('hidden');
+                document.getElementById('s4').classList.add('hidden');
+                document.getElementById('s5').classList.remove('hidden');
             }, 5000);
         }
 
@@ -182,18 +238,32 @@
             
             if (input === 'apsar banu' || input === 'apsara') {
                 err.innerText = '';
-                document.getElementById('s4').classList.add('hidden');
-                document.getElementById('s5').classList.remove('hidden');
+                document.getElementById('s5').classList.add('hidden');
+                document.getElementById('s6').classList.remove('hidden');
                 triggerConfetti();
-                typeWriter(messages.txt5, 'txt5', 45);
+                typeWriter(messages.txt6, 'txt6');
             } else if(input === '') {
                 err.innerText = 'Name-a enter pannu thangom! 🙈';
             } else {
                 err.innerText = 'Hey, correct name type pannu! ❤️';
             }
         }
+
+        function goToSlide7() {
+            document.getElementById('s6').classList.add('hidden');
+            document.getElementById('s7').classList.remove('hidden');
+            typeWriter(messages.txt7, 'txt7');
+        }
+
+        function goToSlide8() {
+            document.getElementById('s7').classList.add('hidden');
+            document.getElementById('s8').classList.remove('hidden');
+            triggerConfetti();
+            typeWriter(messages.txt8, 'txt8');
+        }
     </script>
 
+    <!-- Confetti Fireworks Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         function triggerConfetti() {
