@@ -297,3 +297,45 @@
     background-color: #ffccd5 !important;
   }
 </style>
+<!-- Multi-photo background switcher -->
+<script>
+    // Ovvoru slide-kum unga repo-la irukura photos
+    const slidePhotos = {
+        1: 'IMG_20260912_190248_988.jpg',
+        2: 'IMG_20260912_190250_xxx.jpg',
+        3: 'IMG_20260912_190300_xxx.jpg',
+        4: 'IMG_20260912_190310_xxx.jpg',
+        5: 'IMG_20260912_190248_988.jpg',
+        6: 'IMG_20260912_190248_988.jpg',
+        7: 'IMG_20260912_190248_988.jpg',
+        8: 'IMG_20260912_190248_988.jpg'
+    };
+
+    function setSlideBg(num) {
+        if (slidePhotos[num]) {
+            document.body.style.setProperty('background', 
+                `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('${slidePhotos[num]}') no-repeat center center/cover`, 
+                'important'
+            );
+        }
+    }
+
+    // Default Slide 1 photo
+    setSlideBg(1);
+
+    // Slide transition detector
+    const observer = new MutationObserver(() => {
+        for (let i = 1; i <= 8; i++) {
+            let el = document.getElementById('s' + i);
+            if (el && !el.classList.contains('hidden')) {
+                setSlideBg(i);
+                break;
+            }
+        }
+    });
+
+    const cardElem = document.querySelector('.card');
+    if (cardElem) {
+        observer.observe(cardElem, { attributes: true, subtree: true, attributeFilter: ['class'] });
+    }
+</script>
