@@ -380,3 +380,66 @@
         bgObserver.observe(cardContainer, { attributes: true, subtree: true, attributeFilter: ['class'] });
     }
 </script>
+<!-- Direct Background Changer -->
+<script>
+    const allBgPhotos = {
+        1: 'IMG_20260912_190248_988.jpg',
+        2: 'IMG_20260912_190256_003.jpg',
+        3: 'IMG_20260912_190305_617.jpg',
+        4: 'IMG_20260912_190314_737.jpg',
+        5: 'IMG_20260912_190256_003.jpg',
+        6: 'IMG_20260912_190305_617.jpg',
+        7: 'IMG_20260912_190248_988.jpg',
+        8: 'IMG_20260912_190314_737.jpg'
+    };
+
+    function changeScreenBg(num) {
+        if (allBgPhotos[num]) {
+            document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), url('${allBgPhotos[num]}')`;
+        }
+    }
+
+    // Connect with existing slide functions
+    const oldGoToSlide = window.goToSlide;
+    window.goToSlide = function(num) {
+        if (typeof oldGoToSlide === 'function') oldGoToSlide(num);
+        changeScreenBg(num);
+    };
+
+    const oldStartMusicAndNext = window.startMusicAndNext;
+    window.startMusicAndNext = function() {
+        if (typeof oldStartMusicAndNext === 'function') oldStartMusicAndNext();
+        setTimeout(() => changeScreenBg(3), 5000);
+    };
+
+    const oldGoToBlankSlide = window.goToBlankSlide;
+    window.goToBlankSlide = function() {
+        if (typeof oldGoToBlankSlide === 'function') oldGoToBlankSlide();
+        changeScreenBg(4);
+        setTimeout(() => changeScreenBg(5), 5000);
+    };
+
+    const oldCheckName = window.checkName;
+    window.checkName = function() {
+        if (typeof oldCheckName === 'function') oldCheckName();
+        let input = document.getElementById('nameInput').value.trim().toLowerCase();
+        if (input === 'apsar banu' || input === 'apsara') {
+            changeScreenBg(6);
+        }
+    };
+
+    const oldGoToSlide7 = window.goToSlide7;
+    window.goToSlide7 = function() {
+        if (typeof oldGoToSlide7 === 'function') oldGoToSlide7();
+        changeScreenBg(7);
+    };
+
+    const oldGoToSlide8 = window.goToSlide8;
+    window.goToSlide8 = function() {
+        if (typeof oldGoToSlide8 === 'function') oldGoToSlide8();
+        changeScreenBg(8);
+    };
+
+    // First slide direct call
+    changeScreenBg(1);
+</script>
