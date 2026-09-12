@@ -339,3 +339,44 @@
         observer.observe(cardElem, { attributes: true, subtree: true, attributeFilter: ['class'] });
     }
 </script>
+<!-- Slide background photo switcher -->
+<script>
+    const slidePhotos = {
+        1: 'IMG_20260912_190248_988.jpg', // Slide 1: Saree photo
+        2: 'IMG_20260912_190256_003.jpg', // Slide 2: Cute filter photo
+        3: 'IMG_20260912_190305_617.jpg', // Slide 3: Shawl photo
+        4: 'IMG_20260912_190314_737.jpg', // Slide 4: Standing saree photo
+        5: 'IMG_20260912_190256_003.jpg', // Slide 5: Name enter slide
+        6: 'IMG_20260912_190305_617.jpg', // Slide 6: First wish slide
+        7: 'IMG_20260912_190248_988.jpg', // Slide 7: Gift slide
+        8: 'IMG_20260912_190314_737.jpg'  // Slide 8: Final Kutta Mailuu slide
+    };
+
+    function updateBg(slideNum) {
+        if (slidePhotos[slideNum]) {
+            document.body.style.setProperty(
+                'background',
+                `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), url('${slidePhotos[slideNum]}') no-repeat center center/cover`,
+                'important'
+            );
+        }
+    }
+
+    // Default Slide 1 photo set
+    updateBg(1);
+
+    // Watch for slide changes
+    const cardContainer = document.querySelector('.card');
+    if (cardContainer) {
+        const bgObserver = new MutationObserver(() => {
+            for (let i = 1; i <= 8; i++) {
+                const el = document.getElementById('s' + i);
+                if (el && !el.classList.contains('hidden')) {
+                    updateBg(i);
+                    break;
+                }
+            }
+        });
+        bgObserver.observe(cardContainer, { attributes: true, subtree: true, attributeFilter: ['class'] });
+    }
+</script>
