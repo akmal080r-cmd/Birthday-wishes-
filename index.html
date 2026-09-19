@@ -4,58 +4,531 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You ❤️</title>
+    <title>Happy Birthday Apsara ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
-        body { 
-            margin: 0; 
-            padding: 0; 
-            font-family: sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            overflow: hidden; 
-            color: #4a1c22;
-            background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), url('bg.jpg') no-repeat center center/cover;
-            background-color: #ffccd5;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        .emoji-bg { position: absolute; font-size: 25px; animation: floatUp 7s linear infinite; z-index: 1; opacity: 0.7; bottom: -50px; pointer-events: none; }
-        @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 20% { opacity: 0.7; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
-        
-        .card { 
-            background: rgba(255, 255, 255, 0.9); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-            padding: 30px 25px; 
-            border-radius: 28px; 
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); 
-            text-align: center; 
-            width: 85%; 
-            max-width: 360px; 
-            position: relative; 
-            z-index: 10; 
-            border: 1.5px solid rgba(255, 255, 255, 0.7); 
-            min-height: 250px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center top, #240b28 0%, #0d020e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px 20px 15px;
+            color: #fff;
+            position: relative;
         }
-        h1 { color: #ff2a55; font-size: 1.6rem; margin-bottom: 12px; }
-        .text-box { font-size: 1.15rem; line-height: 1.6; color: #222; min-height: 70px; }
-        .btn { 
-            background: linear-gradient(135deg, #ff4d6d, #ff2a55); 
-            color: white; 
-            border: none; 
-            padding: 15px; 
-            border-radius: 15px; 
-            font-size: 1rem; 
-            cursor: pointer; 
-            font-weight: bold; 
-            width: 100%; 
-            margin-top: 15px; 
-            box-shadow: 0 4px 15px rgba(255, 42, 85, 0.4);
+
+        /* Floating background heart particles */
+        .emoji-bg {
+            position: absolute;
+            font-size: 20px;
+            animation: floatUp 8s linear infinite;
+            z-index: 1;
+            opacity: 0.5;
+            bottom: -50px;
+            pointer-events: none;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.5; }
+            100% { transform: translateY(-115vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ------------------ ROPE & FAIRY LIGHTS ------------------ */
+        .wire-container {
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            margin-top: 12px;
+            z-index: 5;
+        }
+
+        .rope-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #5c3c24, #9a6b42, #5c3c24);
+            border-radius: 2px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        /* Glowing Fairy Lights on String */
+        .lights {
+            display: flex;
+            justify-content: space-around;
+            position: absolute;
+            width: 100%;
+            top: 2px;
+            pointer-events: none;
+        }
+
+        .bulb {
+            width: 10px;
+            height: 14px;
+            border-radius: 50% 50% 40% 40%;
+            animation: flicker 1.8s infinite alternate;
+        }
+        .b1 { background: #ffea79; box-shadow: 0 0 12px #ffea79; animation-delay: 0s; }
+        .b2 { background: #ff4d88; box-shadow: 0 0 12px #ff4d88; animation-delay: 0.4s; }
+        .b3 { background: #4df0ff; box-shadow: 0 0 12px #4df0ff; animation-delay: 0.8s; }
+        .b4 { background: #79ff88; box-shadow: 0 0 12px #79ff88; animation-delay: 0.2s; }
+        .b5 { background: #ffb04d; box-shadow: 0 0 12px #ffb04d; animation-delay: 0.6s; }
+
+        @keyframes flicker {
+            0% { opacity: 0.5; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* ------------------ HANGING POLAROID PHOTO ------------------ */
+        .hanging-rig {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform-origin: top center;
+            animation: gentleSway 4s ease-in-out infinite alternate;
+            margin-top: -1px;
+        }
+
+        @keyframes gentleSway {
+            0% { transform: rotate(-2.8deg); }
+            100% { transform: rotate(2.8deg); }
+        }
+
+        .hang-strings {
+            display: flex;
+            gap: 130px;
+            position: relative;
+            z-index: 6;
+        }
+
+        .string {
+            width: 1.5px;
+            height: 22px;
+            background: #bfa382;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+        }
+
+        .clips-row {
+            display: flex;
+            gap: 120px;
+            margin-top: -5px;
+            z-index: 8;
+        }
+
+        /* Wooden Clothespin Clips */
+        .wood-clip {
+            width: 13px;
+            height: 25px;
+            background: linear-gradient(to right, #b07d4b, #d9aa75, #8a5726);
+            border-radius: 3px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.6);
+            border: 1px solid #5c3817;
+            position: relative;
+        }
+        .wood-clip::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #444;
+        }
+
+        /* Polaroid Photo Frame */
+        .polaroid-card {
+            margin-top: -8px;
+            width: 220px;
+            background: #ffffff;
+            padding: 10px 10px 22px 10px;
+            border-radius: 4px;
+            box-shadow: 0 16px 35px rgba(0,0,0,0.7), 0 0 25px rgba(255, 77, 136, 0.2);
+            transition: transform 0.4s ease;
+        }
+
+        .photo-window {
+            width: 100%;
+            height: 230px;
+            border-radius: 3px;
+            background-size: cover;
+            background-position: center;
+            background-color: #f0f0f0;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            transition: opacity 0.5s ease;
+        }
+
+        .polaroid-tag {
+            font-family: 'Dancing Script', cursive;
+            color: #333;
+            font-size: 1.25rem;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        /* ------------------ BOTTOM GLASS CARD ------------------ */
+        .card {
+            width: 100%;
+            max-width: 380px;
+            background: rgba(28, 9, 33, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 120, 180, 0.3);
+            border-radius: 26px;
+            padding: 22px 20px;
+            text-align: center;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 42, 109, 0.2);
+            z-index: 10;
+            min-height: 195px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #ff5e97;
+            margin-bottom: 6px;
+            text-shadow: 0 0 10px rgba(255, 94, 151, 0.6);
+        }
+
+        .text-box {
+            font-size: 1rem;
+            line-height: 1.55;
+            color: #ffe8f2;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff2a6d, #ff5e97);
+            color: white;
+            border: none;
+            padding: 13px 20px;
+            border-radius: 40px;
+            font-size: 0.98rem;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 14px;
+            box-shadow: 0 6px 20px rgba(255, 42, 109, 0.45);
             transition: 0.2s;
         }
         .btn:active { transform: scale(0.97); }
-        .hidden { display: none !import
+
+        .hidden { display: none !important; }
+
+        .timer-badge {
+            display: inline-block;
+            margin: 10px auto;
+            padding: 8px 24px;
+            border-radius: 30px;
+            background: rgba(255, 42, 109, 0.2);
+            border: 1px solid #ff4d88;
+            color: #ffb3cc;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1.5px solid #ff4d88;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            margin-top: 10px;
+        }
+        .input-box::placeholder { color: rgba(255,255,255,0.5); }
+        .err-msg { color: #ff6b8b; font-size: 0.85rem; margin-top: 6px; min-height: 18px; }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top: 3px solid #ff2a6d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 8px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Player -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Neethanadi-MassTamilan.fm.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Top Rope + Fairy Lights -->
+    <div class="wire-container">
+        <div class="rope-line"></div>
+        <div class="lights">
+            <div class="bulb b1"></div>
+            <div class="bulb b2"></div>
+            <div class="bulb b3"></div>
+            <div class="bulb b4"></div>
+            <div class="bulb b5"></div>
+        </div>
+    </div>
+
+    <!-- Hanging Clothespin + Polaroid Frame -->
+    <div class="hanging-rig">
+        <div class="hang-strings">
+            <div class="string"></div>
+            <div class="string"></div>
+        </div>
+        <div class="clips-row">
+            <div class="wood-clip"></div>
+            <div class="wood-clip"></div>
+        </div>
+        <div class="polaroid-card">
+            <div id="hangingPhoto" class="photo-window"></div>
+            <div id="photoLabel" class="polaroid-tag">Apsara ✨</div>
+        </div>
+    </div>
+
+    <!-- Bottom Dialogue Card -->
+    <div class="card">
+        
+        <!-- Suspense Countdown -->
+        <div id="s_loading" class="hidden">
+            <h1>Wait for it... ❤️</h1>
+            <div id="pageTimer" class="timer-badge">Opening in... 5s</div>
+        </div>
+
+        <!-- Slide 1: Intro -->
+        <div id="s1">
+            <h1>Hi ❤️</h1>
+            <div class="text-box">This is for you...</div>
+            <button class="btn" onclick="goToSlide(2)">Click here 💖</button>
+        </div>
+
+        <!-- Slide 2: Music Tease -->
+        <div id="s2" class="hidden">
+            <h1>Enna Paakuriya? 😜</h1>
+            <div class="text-box" style="font-size: 0.95rem;">
+                Enna song vara matidhu nu paakiriya? Anniku vandhuchu inniku varla nu yosikiriya... 🤭
+            </div>
+            <button class="btn" onclick="startSongAction()">Click here for song 🎶</button>
+        </div>
+
+        <!-- Slide 3: Sweet Message -->
+        <div id="s3" class="hidden">
+            <h1>Hey... 🌸</h1>
+            <div id="txt3" class="text-box"></div>
+            <button class="btn" onclick="startPrankAction()">Next ➡️</button>
+        </div>
+
+        <!-- Slide 4: System Hang Prank -->
+        <div id="s4" class="hidden">
+            <div class="spinner"></div>
+            <h1 style="font-size: 1.4rem;">Loading surprise... ⏳</h1>
+            <div class="text-box" style="font-size: 0.92rem;">
+                Wait, connection lost... illa illa unoda cute smile paathu system hang aaiduchu 🤭
+            </div>
+        </div>
+
+        <!-- Slide 5: Name Verification -->
+        <div id="s5" class="hidden">
+            <h1>Who is this? 🙈</h1>
+            <p style="color: #ffd6e7; font-size: 0.88rem;">Enter your cute name to unlock:</p>
+            <input type="text" id="nameInput" class="input-box" placeholder="Your name...">
+            <div id="errMsg" class="err-msg"></div>
+            <button class="btn" onclick="checkNameAction()">Unlock Wish 🎁</button>
+        </div>
+
+        <!-- Slide 6: First Wish -->
+        <div id="s6" class="hidden">
+            <h1>Special Wish 🎉</h1>
+            <div id="txt6" class="text-box" style="color: #ff9ebb; font-weight: 600;"></div>
+            <div style="font-size: 26px; margin-top: 4px;">🎂 🎁 🌹</div>
+            <button class="btn" onclick="goToSlide(7)">Next ➡️</button>
+        </div>
+
+        <!-- Slide 7: Gift Slide -->
+        <div id="s7" class="hidden">
+            <h1>A Small Gift 🎁</h1>
+            <div id="txt7" class="text-box"></div>
+            <div style="font-size: 26px; margin-top: 4px;">✨ 🛍️ 💖</div>
+            <button class="btn" onclick="goToSlide(8)">Next ➡️</button>
+        </div>
+
+        <!-- Slide 8: Grand Finale -->
+        <div id="s8" class="hidden">
+            <h1 style="font-size: 2.2rem;">Happy Birthday! 🎉</h1>
+            <div id="txt8" class="text-box" style="color: #ffc2d4; font-size: 1.15rem; font-weight: 600;"></div>
+            <div style="font-size: 32px; margin-top: 6px;">🥳 🎉 💃 💖</div>
+        </div>
+
+    </div>
+
+    <!-- Script Section -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        // Floating Heart Particles
+        const emojis = ['❤️', '💖', '✨', '🌹'];
+        for (let i = 0; i < 18; i++) {
+            let e = document.createElement('div');
+            e.className = 'emoji-bg';
+            e.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            e.style.left = Math.random() * 100 + 'vw';
+            e.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            document.body.appendChild(e);
+        }
+
+        // Photos on hanging frame
+        const photoMap = {
+            1: { src: 'IMG_20260912_190248_988.jpg', label: 'For You ❤️' },
+            2: { src: 'IMG_20260912_190256_003.jpg', label: 'Cute Smile 😜' },
+            3: { src: 'IMG_20260912_190305_617.jpg', label: 'Strong Girl ✨' },
+            4: { src: 'IMG_20260912_190314_737.jpg', label: 'System Hang 🤭' },
+            5: { src: 'IMG_20260912_190256_003.jpg', label: 'Who is this? 🙈' },
+            6: { src: 'IMG_20260912_190305_617.jpg', label: 'Thangoo 💝' },
+            7: { src: 'IMG_20260912_190248_988.jpg', label: 'Special Gift 🎁' },
+            8: { src: 'IMG_20260912_190314_737.jpg', label: 'Kutta Mailuu 🎉' }
+        };
+
+        const photoWindow = document.getElementById('hangingPhoto');
+        const photoLabel = document.getElementById('photoLabel');
+
+        function updateHangingPhoto(slideNum) {
+            if (photoMap[slideNum]) {
+                photoWindow.style.opacity = '0';
+                setTimeout(() => {
+                    photoWindow.style.backgroundImage = `url('${photoMap[slideNum].src}')`;
+                    photoLabel.innerText = photoMap[slideNum].label;
+                    photoWindow.style.opacity = '1';
+                }, 250);
+            }
+        }
+
+        // Set Slide 1 Photo
+        updateHangingPhoto(1);
+
+        // Typewriter function
+        function typeWriter(text, elementId, speed = 40) {
+            let i = 0;
+            let elem = document.getElementById(elementId);
+            elem.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    elem.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        const messages = {
+            txt3: "Inime eppome smile pannite irukanum edhukagavum alaugha koodathu because your strong girl ✨💪",
+            txt6: "many more happy returns of the day thangoooooooooooo 😊💝",
+            txt7: "Ennala mudinja gift unakku anupiruken, unakku pudikum nu ninaikuren 🎁✨",
+            txt8: "One more time happy birthday di kutta mailuu 🎉😊"
+        };
+
+        function hideAllSlides() {
+            document.querySelectorAll('.card > div').forEach(div => div.classList.add('hidden'));
+        }
+
+        function goToSlide(num) {
+            hideAllSlides();
+            document.getElementById('s' + num).classList.remove('hidden');
+            updateHangingPhoto(num);
+
+            if (num === 7) typeWriter(messages.txt7, 'txt7');
+            if (num === 8) {
+                triggerConfetti();
+                typeWriter(messages.txt8, 'txt8');
+            }
+        }
+
+        function startSongAction() {
+            let music = document.getElementById('bgMusic');
+            try { music.currentTime = 25; } catch(e) {}
+            music.play().catch(e => { music.play(); });
+
+            hideAllSlides();
+            document.getElementById('s_loading').classList.remove('hidden');
+            
+            let count = 5;
+            let timerBadge = document.getElementById('pageTimer');
+            timerBadge.innerText = "Opening in... " + count + "s";
+            
+            let countdown = setInterval(() => {
+                count--;
+                timerBadge.innerText = "Opening in... " + count + "s";
+                if(count <= 0) {
+                    clearInterval(countdown);
+                    hideAllSlides();
+                    document.getElementById('s3').classList.remove('hidden');
+                    updateHangingPhoto(3);
+                    typeWriter(messages.txt3, 'txt3');
+                }
+            }, 1000);
+        }
+
+        function startPrankAction() {
+            hideAllSlides();
+            document.getElementById('s4').classList.remove('hidden');
+            updateHangingPhoto(4);
+
+            setTimeout(() => {
+                triggerConfetti();
+                hideAllSlides();
+                document.getElementById('s5').classList.remove('hidden');
+                updateHangingPhoto(5);
+            }, 5000);
+        }
+
+        function checkNameAction() {
+            let input = document.getElementById('nameInput').value.trim().toLowerCase();
+            let err = document.getElementById('errMsg');
+            
+            if (input === 'apsar banu' || input === 'apsara') {
+                err.innerText = '';
+                hideAllSlides();
+                document.getElementById('s6').classList.remove('hidden');
+                updateHangingPhoto(6);
+                triggerConfetti();
+                typeWriter(messages.txt6, 'txt6');
+            } else if(input === '') {
+                err.innerText = 'Name-a enter pannu thangom! 🙈';
+            } else {
+                err.innerText = 'Hey, correct name type pannu! ❤️';
+            }
+        }
+
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 6, angle: 60, spread: 60, origin: { x: 0 } });
+                confetti({ particleCount: 6, angle: 120, spread: 60, origin: { x: 1 } });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            })();
+        }
+    </script>
+</body>
+</html>
