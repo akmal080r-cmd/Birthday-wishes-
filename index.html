@@ -1185,4 +1185,148 @@
     buildRChips();
     showRDay(1);
             </script>
+<!-- BULLETPROOF FIX FOR PHOTO, AUDIO & CHIPS -->
+<style>
+    /* Force chips and contents to stay fully visible inside screen */
+    #rectifyModal {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        padding-bottom: 60px !important;
+    }
+    .r-stage {
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+    }
+    /* Photo container with real image display */
+    .r-photo-box {
+        width: 100% !important;
+        height: 230px !important;
+        border-radius: 16px !important;
+        border: 2px solid #ff4d88 !important;
+        background: #18031d !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-bottom: 12px !important;
+        overflow: hidden !important;
+    }
+    .r-photo-box img {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+        display: block !important;
+    }
+    /* Interactive Music Button that bypasses Chrome block */
+    .music-btn-active {
+        background: linear-gradient(135deg, #ff2a6d, #ff5e97) !important;
+        color: #fff !important;
+        border: none !important;
+        padding: 8px 18px !important;
+        border-radius: 20px !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        margin: 8px auto !important;
+        box-shadow: 0 4px 15px rgba(255, 42, 109, 0.4) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+</style>
+
+<script>
+(function() {
+    // 1. Fix Photo Display
+    const photoContainer = document.querySelector('.r-photo') || document.querySelector('.r-photo-container');
+    if (photoContainer) {
+        photoContainer.className = 'r-photo-box';
+        photoContainer.innerHTML = '<img id="liveApsaraImg" src="IMG_20260912_190248_988.jpg" alt="Apsara">';
+    }
+
+    // 2. Audio Engine with Fallback & Direct Trigger
+    let myAudio = document.getElementById('bgMusic');
+    if (!myAudio) {
+        myAudio = document.createElement('audio');
+        myAudio.id = 'bgMusic';
+        myAudio.loop = true;
+        myAudio.src = 'Neethanadi-MassTamilan.fm.mp3';
+        document.body.appendChild(myAudio);
+    }
+
+    function forcePlayMusic() {
+        try {
+            if (myAudio.paused) {
+                myAudio.currentTime = 25;
+                let playProm = myAudio.play();
+                if (playProm !== undefined) {
+                    playProm.then(() => {
+                        const mTag = document.getElementById('musicActionBtn') || document.querySelector('.music-pill');
+                        if (mTag) mTag.innerHTML = '🎶 Music Playing...';
+                    }).catch(e => {
+                        console.log("Audio waiting for user tap");
+                    });
+                }
+            }
+        } catch(err) {}
+    }
+
+    // Replace passive music tag with clickable guaranteed player
+    const musicPill = document.querySelector('.music-pill');
+    if (musicPill) {
+        musicPill.outerHTML = '<button id="musicActionBtn" class="music-btn-active" onclick="forcePlayMusic()">▶️ Tap for Music 🎶</button>';
+    }
+
+    // Attempt sound on ANY touch anywhere on the mobile screen
+    window.addEventListener('touchstart', forcePlayMusic, { passive: true });
+    window.addEventListener('click', forcePlayMusic, { passive: true });
+
+    // 3. Ensure Nov 1 - Nov 12 Chips Are Populated and Clickable
+    const chipsBar = document.getElementById('rChips');
+    if (chipsBar) {
+        chipsBar.innerHTML = '';
+        const dayPhotos = {
+            1: 'IMG_20260912_190248_988.jpg',
+            2: '1000005515.jpg',
+            3: '1000005516.jpg',
+            4: 'IMG_20260912_190314_737.jpg',
+            5: '1000005513.jpg',
+            6: 'IMG_20260912_190248_988.jpg',
+            7: 'IMG_20260912_190305_617.jpg',
+            8: '1000005516.jpg',
+            9: '1000005515.jpg',
+            10: '1000005513.jpg',
+            11: 'IMG_20260912_190248_988.jpg',
+            12: 'IMG_20260912_190314_737.jpg'
+        };
+
+        for (let d = 1; d <= 12; d++) {
+            let b = document.createElement('button');
+            b.className = 'r-chip' + (d === 1 ? ' active' : '');
+            b.innerText = 'Nov ' + (d < 10 ? '0' + d : d);
+            b.onclick = function() {
+                document.querySelectorAll('.r-chip').forEach(el => el.classList.remove('active'));
+                b.classList.add('active');
+                
+                const imgEl = document.getElementById('liveApsaraImg');
+                if (imgEl && dayPhotos[d]) {
+                    imgEl.src = dayPhotos[d];
+                }
+                
+                if (typeof showRDay === 'function') {
+                    showRDay(d);
+                }
+                forcePlayMusic();
+            };
+            chipsBar.appendChild(b);
+        }
+    }
+
+    // Set first day photo immediately
+    const firstImg = document.getElementById('liveApsaraImg');
+    if (firstImg) firstImg.src = 'IMG_20260912_190248_988.jpg';
+
+})();
+</script>
 
