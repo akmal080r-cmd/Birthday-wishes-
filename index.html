@@ -319,4 +319,88 @@
     </script>
 </body>
 </html>
+<!-- REAL-TIME AUTOMATIC DATE LOCK OVERRIDE -->
+<style>
+    .d-chip.locked {
+        opacity: 0.38 !important;
+        border-color: #555 !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+    }
+    #lockToastMsg {
+        color: #ffb3cc;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-top: 6px;
+        min-height: 20px;
+        text-align: center;
+    }
+</style>
+
+<script>
+(function() {
+    // 1. Innikku date calculation (Nov 1 to Nov 12 real-time lock)
+    function getTodayLockLimit() {
+        const today = new Date();
+        const month = today.getMonth(); // 10 = November
+        const date = today.getDate();
+
+        // November-ku munnadi irundha Day 1 mattum open for testing
+        if (month < 10) return 1;
+        // November mudinjadhum all unlocked
+        if (month > 10) return 12;
+        // November nadakkumbodhu strictly inniku date varaikkum mattum unlock
+        return Math.min(Math.max(date, 1), 12);
+    }
+
+    // 2. Add Lock Toast Container
+    let tBox = document.getElementById('lockToastMsg');
+    if (!tBox) {
+        tBox = document.createElement('div');
+        tBox.id = 'lockToastMsg';
+        const musicPill = document.querySelector('.music-pill') || document.getElementById('musicBtn');
+        if (musicPill && musicPill.parentNode) {
+            musicPill.parentNode.insertBefore(tBox, musicPill.nextSibling);
+        }
+    }
+
+    // 3. Re-lock Nov 01 to Nov 12 Chips
+    function applySmartLock() {
+        const limit = getTodayLockLimit();
+        const allChips = document.querySelectorAll('.d-chip');
+
+        allChips.forEach((btn, index) => {
+            const dayNum = index + 1;
+            const isLocked = dayNum > limit;
+
+            if (isLocked) {
+                btn.classList.add('locked');
+                if (!btn.innerText.includes('🔒')) {
+                    btn.innerText = '🔒 ' + btn.innerText;
+                }
+            } else {
+                btn.classList.remove('locked');
+            }
+
+            // Click interceptor for locked days
+            btn.onclick = function(e) {
+                if (dayNum > getTodayLockLimit()) {
+                    e.stopImmediatePropagation();
+                    tBox.innerText = "Innikku idhu open aagadhu di kutta, wait pannu! 🤭🔒";
+                    setTimeout(() => { tBox.innerText = ""; }, 3500);
+                    return false;
+                }
+                tBox.innerText = "";
+                document.querySelectorAll('.d-chip').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                if (typeof setDay === 'function') setDay(dayNum);
+            };
+        });
+    }
+
+    // Apply lock once chips are ready
+    setTimeout(applySmartLock, 300);
+    // Extra safety trigger if gift box was used
+    window.addEventListener('click', () => { setTimeout(applySmartLock, 200); }, { once: true });
+})();
+</script>
 
