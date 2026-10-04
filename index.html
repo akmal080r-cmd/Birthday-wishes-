@@ -403,4 +403,94 @@
     window.addEventListener('click', () => { setTimeout(applySmartLock, 200); }, { once: true });
 })();
 </script>
+<!-- BULLETPROOF ZERO-BYPASS DATE LOCK -->
+<style>
+    .d-chip.locked, .r-chip.locked {
+        opacity: 0.35 !important;
+        border-color: #555 !important;
+        background: rgba(0, 0, 0, 0.45) !important;
+        cursor: not-allowed !important;
+    }
+    #lockToastMsg {
+        color: #ffb3cc;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin: 6px auto;
+        min-height: 22px;
+        text-align: center;
+        display: block;
+    }
+</style>
+
+<script>
+(function() {
+    function getTodayLockLimit() {
+        const today = new Date();
+        const month = today.getMonth(); // 10 = November
+        const date = today.getDate();
+
+        // Innikku October (month < 10) -> Strictly Day 1 mattum test-kku open
+        if (month < 10) return 1;
+        // November mudinjadhum -> all 12 days open
+        if (month > 10) return 12;
+        // November 1-12 nadakkumbodhu -> andha andha date varai mattum open
+        return Math.min(Math.max(date, 1), 12);
+    }
+
+    function enforceLock() {
+        const limit = getTodayLockLimit();
+        const chips = document.querySelectorAll('.d-chip, .r-chip');
+
+        // Add toast container if missing
+        let tBox = document.getElementById('lockToastMsg');
+        if (!tBox) {
+            tBox = document.createElement('div');
+            tBox.id = 'lockToastMsg';
+            const target = document.querySelector('.music-pill') || document.getElementById('musicBtn') || document.getElementById('chipsBar');
+            if (target && target.parentNode) {
+                target.parentNode.insertBefore(tBox, target);
+            }
+        }
+
+        chips.forEach((btn, index) => {
+            const dayNum = index + 1;
+            if (dayNum > limit) {
+                btn.classList.add('locked');
+                btn.classList.remove('active');
+                if (!btn.innerText.includes('🔒')) {
+                    btn.innerText = '🔒 ' + btn.innerText.replace('🔒', '').trim();
+                }
+            } else {
+                btn.classList.remove('locked');
+            }
+        });
+    }
+
+    // Capture phase listener (pazhaya code click-ai idhu total-a block pannum)
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.d-chip, .r-chip');
+        if (!btn) return;
+
+        const limit = getTodayLockLimit();
+        const allChips = Array.from(document.querySelectorAll('.d-chip, .r-chip'));
+        const dayNum = allChips.indexOf(btn) + 1;
+
+        if (dayNum > limit) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            let tBox = document.getElementById('lockToastMsg');
+            if (tBox) {
+                tBox.innerText = "Innikku idhu open aagadhu di kutta, wait pannu! 🤭🔒";
+                setTimeout(() => { if (tBox) tBox.innerText = ""; }, 3000);
+            }
+            return false;
+        }
+    }, true);
+
+    // Keep applying lock even after gift unwrap or rerender
+    setInterval(enforceLock, 400);
+})();
+</script>
 
