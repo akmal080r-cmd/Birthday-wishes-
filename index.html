@@ -493,4 +493,87 @@
     setInterval(enforceLock, 400);
 })();
 </script>
+<!-- GUARANTEED LOCK OVERRIDE -->
+<style>
+    .d-chip.is-locked, .r-chip.is-locked {
+        opacity: 0.35 !important;
+        border-color: #555 !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        cursor: not-allowed !important;
+        pointer-events: auto !important;
+    }
+    #lockToastMsg {
+        color: #ffb3cc;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 8px auto;
+        min-height: 22px;
+        text-align: center;
+        display: block;
+    }
+</style>
+
+<script>
+(function() {
+    function getTodayLockLimit() {
+        const today = new Date();
+        const month = today.getMonth(); // 10 = November
+        const date = today.getDate();
+
+        // October-la irundha strictly Nov 1 mattum testing-kku open
+        if (month < 10) return 1;
+        if (month > 10) return 12;
+        return Math.min(Math.max(date, 1), 12);
+    }
+
+    function createToast() {
+        let t = document.getElementById('lockToastMsg');
+        if (!t) {
+            t = document.createElement('div');
+            t.id = 'lockToastMsg';
+            const bar = document.getElementById('chipsBar') || document.querySelector('.dates-scroll') || document.getElementById('rChips');
+            if (bar && bar.parentNode) {
+                bar.parentNode.insertBefore(t, bar);
+            }
+        }
+        return t;
+    }
+
+    function freezeLockedDays() {
+        const limit = getTodayLockLimit();
+        const chips = document.querySelectorAll('.d-chip, .r-chip');
+        const toast = createToast();
+
+        chips.forEach((btn, index) => {
+            const dayNum = index + 1;
+
+            if (dayNum > limit) {
+                // 1. Visual lock
+                btn.classList.add('is-locked');
+                btn.classList.remove('active');
+                if (!btn.innerText.includes('🔒')) {
+                    btn.innerText = '🔒 ' + btn.innerText.replace('🔒', '').trim();
+                }
+
+                // 2. Direct hard overwrite of the click action
+                btn.onclick = function(e) {
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                    }
+                    if (toast) {
+                        toast.innerText = "Innikku idhu open aagadhu di kutta, wait pannu! 🤭🔒";
+                        setTimeout(() => { toast.innerText = ""; }, 2500);
+                    }
+                    return false;
+                };
+            }
+        });
+    }
+
+    // Run repeatedly to catch any DOM redraws after gift unwrap
+    setInterval(freezeLockedDays, 250);
+})();
+</script>
 
