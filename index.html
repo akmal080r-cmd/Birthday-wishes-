@@ -878,4 +878,311 @@
     buildRChips();
     showRDay(1);
 </script>
+<!-- PHOTO RENDER + CHIPS RESTORE FIX -->
+<style>
+    #rectifyModal {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: radial-gradient(circle at top, #2b082e 0%, #0d0112 100%) !important;
+        z-index: 999999 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        padding: 20px 15px 40px !important;
+        overflow-y: auto !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        color: #fff !important;
+    }
+    .r-stage {
+        width: 100% !important;
+        max-width: 360px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        backdrop-filter: blur(16px) !important;
+        border: 1.5px solid #ff4d88 !important;
+        border-radius: 24px !important;
+        padding: 20px 16px !important;
+        text-align: center !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
+        margin-top: 10px !important;
+    }
+    .r-badge {
+        display: inline-block !important;
+        background: #ff2a6d !important;
+        color: #fff !important;
+        padding: 5px 16px !important;
+        border-radius: 15px !important;
+        font-size: 0.85rem !important;
+        font-weight: bold !important;
+        margin-bottom: 12px !important;
+        letter-spacing: 1px !important;
+    }
+    .r-photo-container {
+        width: 100% !important;
+        height: 250px !important;
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        border: 2px solid #ff4d88 !important;
+        margin-bottom: 14px !important;
+        background-color: #1a0520 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .r-photo-container img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        display: block !important;
+    }
+    .r-title {
+        font-size: 1.45rem !important;
+        color: #ff5e97 !important;
+        margin-bottom: 8px !important;
+        font-weight: bold !important;
+    }
+    .r-subtitle {
+        font-size: 0.95rem !important;
+        line-height: 1.5 !important;
+        color: #ffe6f0 !important;
+        min-height: 55px !important;
+        margin-bottom: 12px !important;
+        padding: 0 5px !important;
+    }
+    .r-nav-btn {
+        background: linear-gradient(135deg, #ff2a6d, #ff5e97) !important;
+        color: #fff !important;
+        border: none !important;
+        padding: 10px 18px !important;
+        border-radius: 25px !important;
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        width: 100% !important;
+        margin-top: 8px !important;
+    }
+    .r-scroll {
+        display: flex !important;
+        gap: 6px !important;
+        overflow-x: auto !important;
+        padding: 10px 0 !important;
+        margin-top: 14px !important;
+        border-top: 1px solid rgba(255,255,255,0.15) !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    .r-chip {
+        flex: 0 0 auto !important;
+        background: rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid #ff4d88 !important;
+        color: #fff !important;
+        padding: 6px 10px !important;
+        border-radius: 10px !important;
+        font-size: 0.78rem !important;
+        cursor: pointer !important;
+    }
+    .r-chip.active {
+        background: #ff2a6d !important;
+        font-weight: bold !important;
+    }
+    .r-chip.locked {
+        opacity: 0.45 !important;
+        border-color: #555 !important;
+    }
+    .lock-toast {
+        color: #ffb3cc;
+        font-size: 0.82rem;
+        margin-top: 6px;
+        min-height: 18px;
+    }
+    .music-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+        color: #ff9ebb;
+        background: rgba(255, 42, 109, 0.15);
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 158, 187, 0.3);
+        margin-bottom: 10px;
+    }
+</style>
+
+<div id="rectifyModal">
+    <div class="r-stage">
+        <div id="rDate" class="r-badge">NOVEMBER 01</div>
+        <div class="r-photo-container">
+            <img id="rImg" src="IMG_20260912_190248_988.jpg" alt="Apsara">
+        </div>
+        <div id="rTitle" class="r-title">Advance Happy Birthday ❤️</div>
+        <div id="rWish" class="r-subtitle">Advance Happy Birthday 🎂 thangoooo! En iniyavale smile pannite irukanum eppovume ✨</div>
+        <div id="rEmoji" style="font-size: 26px; margin-bottom: 6px;">🎂 💝 🌸</div>
+        
+        <div class="music-pill">
+            <span>🎶 Neethanadi</span>
+        </div>
+
+        <button id="nextSlideBtn" class="r-nav-btn" style="display: none;" onclick="nextSubSlide()">Next Surprise Wish ➡️</button>
+        
+        <div id="lockToast" class="lock-toast"></div>
+
+        <p style="font-size: 0.75rem; color: #ffb3cc; margin-top: 8px;">Countdown Calendar (Nov 1 - Nov 12):</p>
+        <div class="r-scroll" id="rChips"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    const rData = {
+        1: { date: "NOVEMBER 01", title: "Advance Happy Birthday ❤️", wish: "Advance Happy Birthday 🎂 thangoooo! En iniyavale smile pannite irukanum eppovume ✨", photo: "IMG_20260912_190248_988.jpg", emoji: "🎂 💝 🌸" },
+        2: { date: "NOVEMBER 02", title: "Day 02 Surprise 🕊️", wish: "Advance Happy Birthday mailuu! Unoda cute smile dhaan enakku eppovume special 💖", photo: "1000005515.jpg", emoji: "🕊️ ✨ 🌹" },
+        3: { date: "NOVEMBER 03", title: "Day 03 Surprise 🧸", wish: "Advance Happy Birthday kutta! Always be bold, edhukagavum alaugha koodadhu strong girl 💪", photo: "1000005516.jpg", emoji: "🧸 🎈 💕" },
+        4: { date: "NOVEMBER 04", title: "Day 04 Surprise 🐥", wish: "Advance Happy Birthday kutta mailu! En cute vaalu neethaan eppodhum 🤭", photo: "IMG_20260912_190314_737.jpg", emoji: "🐥 🎂 💐" },
+        5: { date: "NOVEMBER 05", title: "Day 05 Surprise 🥰", wish: "Advance Happy Birthday chlmm! Unkooda pesumbodhu time poradhey theriyala ✨", photo: "1000005513.jpg", emoji: "🥰 💖 🎁" },
+        6: { date: "NOVEMBER 06", title: "Day 06 Surprise 💎", wish: "Advance Happy Birthday en vairam! En life-la kedaicha precious gift neethaan 💎❤️️", photo: "IMG_20260912_190248_988.jpg", emoji: "💎 🌹 ✨" },
+        7: { date: "NOVEMBER 07", title: "Day 07 Surprise ✏️", wish: "Advance Happy Birthday pencil! Konjam thadi aana cute-a iruppa la 😜", photo: "IMG_20260912_190305_617.jpg", emoji: "✏️ 🤭 🌸" },
+        8: { date: "NOVEMBER 08", title: "Day 08 Surprise 🌸", wish: "Advance Happy Birthday apsuu! You are genuinely special and very close to my heart 💝", photo: "1000005516.jpg", emoji: "🌸 🎂 👑" },
+        9: { date: "NOVEMBER 09", title: "Day 09 Surprise 🙈", wish: "Advance Happy Birthday apseyy! The countdown is getting closer thangom ⏳✨", photo: "1000005515.jpg", emoji: "🙈 💖 🎉" },
+        10: { date: "NOVEMBER 10", title: "Day 10 Surprise 🌍", wish: "Advance Happy Birthday to my world! Innum two days dhaan irukku periya surprise-ku 🎁", photo: "1000005513.jpg", emoji: "🌍 🌹 🛍️" },
+        11: { date: "NOVEMBER 11", title: "Day 11 Surprise 👑", wish: "Advance Happy Birthday di pondatti! Tomorrow is your big day princess ✨🥰", photo: "IMG_20260912_190248_988.jpg", emoji: "👑 🎊 🥳" }
+    };
+
+    const finaleSlides = [
+        {
+            date: "NOVEMBER 12 🎉 (1/4)",
+            title: "Happy Birthday Thangoo! 🎉",
+            wish: "One more time happy birthday di kutta mailuu! Today is all about you! 🥳💖",
+            photo: "1000005513.jpg",
+            emoji: "🎂 💐 ✨"
+        },
+        {
+            date: "NOVEMBER 12 🌸 (2/4)",
+            title: "Always Keep Smiling ✨",
+            wish: "Inime eppome smile pannite irukanum edhukagavum alaugha koodathu because your strong girl ✨💪",
+            photo: "1000005516.jpg",
+            emoji: "🌸 👑 💕"
+        },
+        {
+            date: "NOVEMBER 12 🤭 (3/4)",
+            title: "Wait A Minute... 😜",
+            wish: "Wait, connection lost... illa illa unoda cute smile paathu system hang aaiduchu 🤭❤️",
+            photo: "1000005515.jpg",
+            emoji: "🙈 💖 ⏳"
+        },
+        {
+            date: "NOVEMBER 12 👑 (4/4)",
+            title: "The Grand Finale 🎁",
+            wish: "Ennala mudinja gift unakku anupiruken, unakku pudikum nu ninaikuren! Many more happy returns of the day thangoooooooooooo 🥳🎉💃💖",
+            photo: "IMG_20260912_190314_737.jpg",
+            emoji: "🥳 🎉 💃 💖"
+        }
+    ];
+
+    let currentFinaleIndex = 0;
+    let isDay12Active = false;
+
+    function getUnlockedDayLimit() {
+        const today = new Date();
+        const month = today.getMonth(); // 10 = November
+        const day = today.getDate();
+
+        if (month < 10) return 1; 
+        if (month > 10) return 12;
+        return Math.min(Math.max(day, 1), 12);
+    }
+
+    function showRDay(n) {
+        document.getElementById('lockToast').innerText = "";
+        const nextBtn = document.getElementById('nextSlideBtn');
+
+        if (n === 12) {
+            isDay12Active = true;
+            currentFinaleIndex = 0;
+            renderFinaleSlide(0);
+            nextBtn.style.display = "block";
+            return;
+        }
+
+        isDay12Active = false;
+        nextBtn.style.display = "none";
+        const item = rData[n];
+        if (!item) return;
+
+        document.getElementById('rDate').innerText = item.date;
+        document.getElementById('rTitle').innerText = item.title;
+        document.getElementById('rWish').innerText = item.wish;
+        document.getElementById('rEmoji').innerText = item.emoji;
+        document.getElementById('rImg').src = item.photo;
+    }
+
+    function renderFinaleSlide(index) {
+        const slide = finaleSlides[index];
+        document.getElementById('rDate').innerText = slide.date;
+        document.getElementById('rTitle').innerText = slide.title;
+        document.getElementById('rWish').innerText = slide.wish;
+        document.getElementById('rEmoji').innerText = slide.emoji;
+        document.getElementById('rImg').src = slide.photo;
+
+        if (typeof confetti === 'function') {
+            confetti({ particleCount: 40, spread: 60 });
+        }
+    }
+
+    function nextSubSlide() {
+        if (!isDay12Active) return;
+        currentFinaleIndex = (currentFinaleIndex + 1) % finaleSlides.length;
+        renderFinaleSlide(currentFinaleIndex);
+    }
+
+    function buildRChips() {
+        const bar = document.getElementById('rChips');
+        bar.innerHTML = '';
+        const maxDay = getUnlockedDayLimit();
+
+        for (let d = 1; d <= 12; d++) {
+            let b = document.createElement('button');
+            const isLocked = d > maxDay;
+            b.className = 'r-chip' + (d === 1 ? ' active' : '') + (isLocked ? ' locked' : '');
+            b.innerText = (isLocked ? '🔒 ' : '') + 'Nov ' + (d < 10 ? '0' + d : d);
+
+            b.onclick = function() {
+                if (d > getUnlockedDayLimit()) {
+                    document.getElementById('lockToast').innerText = "Innikku idhu open aagadhu di kutta, wait pannu! 🤭🔒";
+                    return;
+                }
+                document.querySelectorAll('.r-chip').forEach(el => el.classList.remove('active'));
+                b.classList.add('active');
+                showRDay(d);
+            };
+            bar.appendChild(b);
+        }
+    }
+
+    // Audio setup
+    const bgAudio = document.getElementById('bgMusic') || new Audio('Neethanadi-MassTamilan.fm.mp3');
+    bgAudio.loop = true;
+
+    function playAudioSeamlessly() {
+        try {
+            bgAudio.currentTime = 25;
+            bgAudio.muted = false;
+            bgAudio.volume = 1.0;
+            bgAudio.play();
+        } catch(e) {}
+    }
+
+    ['touchstart', 'touchend', 'click', 'scroll'].forEach(evt => {
+        window.addEventListener(evt, function handleFirstUserAction() {
+            playAudioSeamlessly();
+            window.removeEventListener(evt, handleFirstUserAction);
+        }, { once: true, passive: true });
+    });
+
+    // Run build on load
+    buildRChips();
+    showRDay(1);
+            </script>
 
