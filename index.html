@@ -1,1 +1,260 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Countdown For Apsara ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #2b082e 0%, #0d0112 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px 15px 40px;
+        }
+        .stage {
+            width: 100%;
+            max-width: 360px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid #ff4d88;
+            border-radius: 24px;
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .date-badge {
+            display: inline-block;
+            background: #ff2a6d;
+            color: #fff;
+            padding: 5px 16px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+        .photo-box {
+            width: 100%;
+            height: 245px;
+            border-radius: 16px;
+            border: 2px solid #ff4d88;
+            background-color: #1a0520;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .photo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.7rem;
+            color: #ff5e97;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ffe6f0;
+            min-height: 55px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .music-btn {
+            background: linear-gradient(135deg, #ff2a6d, #ff5e97);
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 6px auto 10px;
+            box-shadow: 0 4px 15px rgba(255, 42, 109, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-btn {
+            background: linear-gradient(135deg, #ff2a6d, #ff5e97);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .dates-scroll {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            -webkit-overflow-scrolling: touch;
+        }
+        .d-chip {
+            flex: 0 0 auto;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid #ff4d88;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .d-chip.active {
+            background: #ff2a6d;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Neethanadi-MassTamilan.fm.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="stage">
+        <div id="dateTag" class="date-badge">NOVEMBER 01</div>
+        <div class="photo-box">
+            <img id="mainImg" src="IMG_20260912_190248_988.jpg" alt="Apsara">
+        </div>
+        <h1 id="wishTitle">Advance Happy Birthday ❤️</h1>
+        <div id="wishText" class="subtitle">Advance Happy Birthday 🎂 thangoooo! En iniyavale smile pannite irukanum eppovume ✨</div>
+        <div id="wishEmojis" style="font-size: 26px; margin-bottom: 6px;">🎂 💝 🌸</div>
+        
+        <div>
+            <button id="musicBtn" class="music-btn" onclick="playMusic()">▶️ Tap to Play Song 🎶</button>
+        </div>
+
+        <button id="nextSlideBtn" class="nav-btn" style="display: none;" onclick="nextSubSlide()">Next Surprise Wish ➡️</button>
+
+        <p style="font-size: 0.75rem; color: #ffb3cc; margin-top: 12px;">Countdown Calendar (Nov 1 - Nov 12):</p>
+        <div class="dates-scroll" id="chipsBar"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        const dailyData = {
+            1: { date: "NOVEMBER 01", title: "Advance Happy Birthday ❤️", wish: "Advance Happy Birthday 🎂 thangoooo! En iniyavale smile pannite irukanum eppovume ✨", photo: "IMG_20260912_190248_988.jpg", emoji: "🎂 💝 🌸" },
+            2: { date: "NOVEMBER 02", title: "Day 02 Surprise 🕊️", wish: "Advance Happy Birthday mailuu! Unoda cute smile dhaan enakku eppovume special 💖", photo: "IMG_20261004_173219_564.jpg", emoji: "🕊️ ✨ 🌹" },
+            3: { date: "NOVEMBER 03", title: "Day 03 Surprise 🧸", wish: "Advance Happy Birthday kutta! Always be bold, edhukagavum alaugha koodadhu strong girl 💪", photo: "IMG_20261004_173215_500.jpg", emoji: "🧸 🎈 💕" },
+            4: { date: "NOVEMBER 04", title: "Day 04 Surprise 🐥", wish: "Advance Happy Birthday kutta mailu! En cute vaalu neethaan eppodhum 🤭", photo: "IMG_20260912_190314_737.jpg", emoji: "🐥 🎂 💐" },
+            5: { date: "NOVEMBER 05", title: "Day 05 Surprise 🥰", wish: "Advance Happy Birthday chlmm! Unkooda pesumbodhu time poradhey theriyala ✨", photo: "IMG_20261004_173223_727.jpg", emoji: "🥰 💖 🎁" },
+            6: { date: "NOVEMBER 06", title: "Day 06 Surprise 💎", wish: "Advance Happy Birthday en vairam! En life-la kedaicha precious gift neethaan 💎❤️", photo: "IMG_20260912_190248_988.jpg", emoji: "💎 🌹 ✨" },
+            7: { date: "NOVEMBER 07", title: "Day 07 Surprise ✏️", wish: "Advance Happy Birthday pencil! Konjam thadi aana cute-a iruppa la 😜", photo: "IMG_20260912_190305_617.jpg", emoji: "✏️ 🤭 🌸" },
+            8: { date: "NOVEMBER 08", title: "Day 08 Surprise 🌸", wish: "Advance Happy Birthday apsuu! You are genuinely special and very close to my heart 💝", photo: "IMG_20261004_173215_500.jpg", emoji: "🌸 🎂 👑" },
+            9: { date: "NOVEMBER 09", title: "Day 09 Surprise 🙈", wish: "Advance Happy Birthday apseyy! The countdown is getting closer thangom ⏳✨", photo: "IMG_20261004_173219_564.jpg", emoji: "🙈 💖 🎉" },
+            10: { date: "NOVEMBER 10", title: "Day 10 Surprise 🌍", wish: "Advance Happy Birthday to my world! Innum two days dhaan irukku periya surprise-ku 🎁", photo: "IMG_20261004_173223_727.jpg", emoji: "🌍 🌹 🛍️" },
+            11: { date: "NOVEMBER 11", title: "Day 11 Surprise 👑", wish: "Advance Happy Birthday di pondatti! Tomorrow is your big day princess ✨🥰", photo: "IMG_20260912_190256_003.jpg", emoji: "👑 🎊 🥳" }
+        };
+
+        const finaleSlides = [
+            { date: "NOVEMBER 12 🎉 (1/4)", title: "Happy Birthday Thangoo! 🎉", wish: "One more time happy birthday di kutta mailuu! Today is all about you! 🥳💖", photo: "IMG_20261004_173223_727.jpg", emoji: "🎂 💐 ✨" },
+            { date: "NOVEMBER 12 🌸 (2/4)", title: "Always Keep Smiling ✨", wish: "Inime eppome smile pannite irukanum edhukagavum alaugha koodathu because your strong girl ✨💪", photo: "IMG_20261004_173215_500.jpg", emoji: "🌸 👑 💕" },
+            { date: "NOVEMBER 12 🤭 (3/4)", title: "Wait A Minute... 😜", wish: "Wait, connection lost... illa illa unoda cute smile paathu system hang aaiduchu 🤭❤️", photo: "IMG_20261004_173219_564.jpg", emoji: "🙈 💖 ⏳" },
+            { date: "NOVEMBER 12 👑 (4/4)", title: "The Grand Finale 🎁", wish: "Ennala mudinja gift unakku anupiruken, unakku pudikum nu ninaikuren! Many more happy returns of the day thangoooooooooooo 🥳🎉💃💖", photo: "IMG_20260912_190314_737.jpg", emoji: "🥳 🎉 💃 💖" }
+        ];
+
+        let currentFinaleIndex = 0;
+        let isDay12Active = false;
+
+        function setDay(dayNum) {
+            const nextBtn = document.getElementById('nextSlideBtn');
+            if (dayNum === 12) {
+                isDay12Active = true;
+                currentFinaleIndex = 0;
+                renderFinale(0);
+                nextBtn.style.display = "block";
+                return;
+            }
+
+            isDay12Active = false;
+            nextBtn.style.display = "none";
+            const data = dailyData[dayNum];
+            if (!data) return;
+
+            document.getElementById('dateTag').innerText = data.date;
+            document.getElementById('wishTitle').innerText = data.title;
+            document.getElementById('wishText').innerText = data.wish;
+            document.getElementById('wishEmojis').innerText = data.emoji;
+            document.getElementById('mainImg').src = data.photo;
+        }
+
+        function renderFinale(idx) {
+            const slide = finaleSlides[idx];
+            document.getElementById('dateTag').innerText = slide.date;
+            document.getElementById('wishTitle').innerText = slide.title;
+            document.getElementById('wishText').innerText = slide.wish;
+            document.getElementById('wishEmojis').innerText = slide.emoji;
+            document.getElementById('mainImg').src = slide.photo;
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 50, spread: 60 });
+            }
+        }
+
+        function nextSubSlide() {
+            if (!isDay12Active) return;
+            currentFinaleIndex = (currentFinaleIndex + 1) % finaleSlides.length;
+            renderFinale(currentFinaleIndex);
+        }
+
+        function buildChips() {
+            const bar = document.getElementById('chipsBar');
+            bar.innerHTML = '';
+            for (let d = 1; d <= 12; d++) {
+                let btn = document.createElement('button');
+                btn.className = 'd-chip' + (d === 1 ? ' active' : '');
+                btn.innerText = 'Nov ' + (d < 10 ? '0' + d : d);
+                btn.onclick = function() {
+                    document.querySelectorAll('.d-chip').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    setDay(d);
+                };
+                bar.appendChild(btn);
+            }
+        }
+
+        function playMusic() {
+            const m = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+            try {
+                m.currentTime = 25;
+                m.play().then(() => {
+                    btn.innerText = "🎶 Music Playing...";
+                }).catch(() => {
+                    m.play();
+                    btn.innerText = "🎶 Music Playing...";
+                });
+            } catch(e) {}
+        }
+
+        window.addEventListener('touchstart', function() { playMusic(); }, { once: true });
+        window.addEventListener('click', function() { playMusic(); }, { once: true });
+
+        buildChips();
+        setDay(1);
+    </script>
+</body>
+</html>
