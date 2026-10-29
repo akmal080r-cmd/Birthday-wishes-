@@ -1,138 +1,222 @@
-<!-- NOV 12 ONLY AUDIO ENGINE + HIDE SONG ON OTHER DAYS + DATE LOCK -->
-<style>
-    /* Song status pill badge hidden on normal days */
-    .music-pill, #musicBtn, #musicActionBtn {
-        display: none !important;
-    }
-    /* Shows only on Nov 12 */
-    .show-on-finale {
-        display: inline-flex !important;
-    }
-    .d-chip.is-locked, .r-chip.is-locked {
-        opacity: 0.35 !important;
-        border-color: #555 !important;
-        background: rgba(0, 0, 0, 0.5) !important;
-        cursor: not-allowed !important;
-    }
-    #lockToastMsg {
-        color: #ffb3cc;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin: 8px auto;
-        min-height: 22px;
-        text-align: center;
-        display: block;
-    }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise For Apsara ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background: #120216 !important;
+        }
+        body {
+            background: radial-gradient(circle at top, #2b082e 0%, #0d0112 100%) !important;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 15px 40px;
+            overflow-x: hidden;
+        }
 
-<script>
-(function() {
-    function getTodayLockLimit() {
-        const today = new Date();
-        const month = today.getMonth(); // 10 = November
-        const date = today.getDate();
+        /* Intro Gift Screen */
+        #introScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            max-width: 360px;
+        }
+        .gift-box {
+            font-size: 85px;
+            margin: 15px 0;
+            animation: giftBounce 1.8s infinite ease-in-out alternate;
+            filter: drop-shadow(0 0 25px rgba(255, 42, 109, 0.8));
+            transition: transform 0.2s;
+        }
+        .gift-box:active { transform: scale(0.92); }
+        @keyframes giftBounce {
+            0% { transform: translateY(0) scale(1) rotate(-3deg); }
+            100% { transform: translateY(-16px) scale(1.08) rotate(3deg); }
+        }
+        .intro-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: #ff5e97;
+            text-shadow: 0 0 15px rgba(255, 94, 151, 0.6);
+            margin-bottom: 8px;
+        }
+        .tap-pill {
+            background: linear-gradient(135deg, #ff2a6d, #ff5e97);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 15px;
+            box-shadow: 0 6px 20px rgba(255, 42, 109, 0.5);
+        }
 
-        if (month < 10) return 1;
-        if (month > 10) return 12;
-        return Math.min(Math.max(date, 1), 12);
-    }
+        /* Main Surprise Stage */
+        .stage {
+            display: none;
+            width: 100%;
+            max-width: 360px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid #ff4d88;
+            border-radius: 24px;
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
 
-    const myAudio = document.getElementById('bgMusic') || document.querySelector('audio');
+        .date-badge {
+            display: inline-block;
+            background: #ff2a6d;
+            color: #fff;
+            padding: 5px 16px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+        .photo-box {
+            width: 100%;
+            height: 245px;
+            border-radius: 16px;
+            border: 2px solid #ff4d88;
+            background-color: #1a0520;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .photo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        h1.w-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.7rem;
+            color: #ff5e97;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ffe6f0;
+            min-height: 55px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .music-pill {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: #ff9ebb;
+            background: rgba(255, 42, 109, 0.15);
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 158, 187, 0.3);
+            margin-bottom: 8px;
+        }
+        .music-pill.active-music {
+            display: inline-flex !important;
+        }
+        .lock-toast {
+            color: #ffb3cc;
+            font-size: 0.84rem;
+            font-weight: 500;
+            min-height: 20px;
+            margin-bottom: 6px;
+        }
+        .nav-btn {
+            background: linear-gradient(135deg, #ff2a6d, #ff5e97);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .dates-scroll {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            -webkit-overflow-scrolling: touch;
+        }
+        .d-chip {
+            flex: 0 0 auto;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid #ff4d88;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .d-chip.active {
+            background: #ff2a6d;
+            font-weight: bold;
+        }
+        .d-chip.locked {
+            opacity: 0.38 !important;
+            border-color: #555 !important;
+            background: rgba(0, 0, 0, 0.45) !important;
+            cursor: not-allowed !important;
+        }
+    </style>
+</head>
+<body>
 
-    // Control audio strictly based on day
-    function handleMusicVisibility(activeDay) {
-        const pill = document.querySelector('.music-pill') || document.getElementById('musicBtn') || document.getElementById('musicActionBtn');
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Neethanadi-MassTamilan.fm.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="introScreen" onclick="unwrapSurprise()">
+        <h1 class="intro-title">A Special Surprise For You ❤️</h1>
+        <p style="font-size: 0.9rem; color: #ffb8d6;">Tap the gift box to open</p>
+        <div class="gift-box">🎁</div>
+        <div class="tap-pill">✨ Tap to Unwrap ✨</div>
+    </div>
+
+    <div id="mainStage" class="stage">
+        <div id="dateTag" class="date-badge">NOVEMBER 01</div>
+        <div class="photo-box">
+            <img id="mainImg" src="IMG_20260912_190248_988.jpg" alt="Apsara">
+        </div>
+        <h1 id="wishTitle" class="w-title">Advance Happy Birthday ❤️</h1>
+        <div id="wishText" class="subtitle">Advance Happy Birthday 🎂 thangoooo! En iniyavale smile pannite irukanum eppovume ✨</div>
+        <div id="wishEmojis" style="font-size: 26px; margin-bottom: 6px;">🎂 💝 🌸</div>
         
-        if (activeDay === 12) {
-            // Nov 12 Grand Finale: Show pill and play song
-            if (pill) {
-                pill.classList.add('show-on-finale');
-                pill.innerHTML = '<span>🎶 Neethanadi Playing...</span>';
-            }
-            if (myAudio) {
-                try {
-                    myAudio.currentTime = 25;
-                    myAudio.play().catch(() => {});
-                } catch(e) {}
-            }
-        } else {
-            // Days 1 to 11: Mute/Pause audio and hide badge completely
-            if (pill) {
-                pill.classList.remove('show-on-finale');
-                pill.style.display = 'none';
-            }
-            if (myAudio) {
-                try {
-                    myAudio.pause();
-                    myAudio.currentTime = 0;
-                } catch(e) {}
-            }
-        }
-    }
+        <div id="musicStatusPill" class="music-pill">
+            <span>🎶 Neethanadi Playing...</span>
+        </div>
 
-    // Stop auto-play immediately when gift box unwrap happens
-    const origUnwrap = window.unwrapSurprise;
-    if (typeof origUnwrap === 'function') {
-        window.unwrapSurprise = function() {
-            origUnwrap();
-            const currentActiveDay = getTodayLockLimit();
-            handleMusicVisibility(currentActiveDay);
-        };
-    }
+        <div id="lockToast" class="lock-toast"></div>
 
-    function createToast() {
-        let t = document.getElementById('lockToastMsg');
-        if (!t) {
-            t = document.createElement('div');
-            t.id = 'lockToastMsg';
-            const bar = document.getElementById('chipsBar') || document.querySelector('.dates-scroll') || document.getElementById('rChips');
-            if (bar && bar.parentNode) {
-                bar.parentNode.insertBefore(t, bar);
-            }
-        }
-        return t;
-    }
-
-    function freezeLockedDays() {
-        const limit = getTodayLockLimit();
-        const chips = document.querySelectorAll('.d-chip, .r-chip');
-        const toast = createToast();
-
-        chips.forEach((btn, index) => {
-            const dayNum = index + 1;
-
-            if (dayNum > limit) {
-                btn.classList.add('is-locked');
-                btn.classList.remove('active');
-                if (!btn.innerText.includes('🔒')) {
-                    btn.innerText = '🔒 ' + btn.innerText.replace('🔒', '').trim();
-                }
-
-                btn.onclick = function(e) {
-                    if (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        e.stopImmediatePropagation();
-                    }
-                    if (toast) {
-                        toast.innerText = "Innikku idhu open aagadhu di kutta, wait pannu! 🤭🔒";
-                        setTimeout(() => { toast.innerText = ""; }, 2500);
-                    }
-                    return false;
-                };
-            } else {
-                // For unlocked allowed days: trigger music check on tab switch
-                const oldClick = btn.onclick;
-                btn.onclick = function(e) {
-                    if (typeof oldClick === 'function') oldClick.call(this, e);
-                    handleMusicVisibility(dayNum);
-                };
-            }
-        });
-    }
-
-    // Initial check
-    setInterval(freezeLockedDays, 250);
-    handleMusicVisibility(getTodayLockLimit());
-})();
-</script>
+        <button id="nextSlideBtn" class="nav-btn" style="display: none;" onclick="
+            
