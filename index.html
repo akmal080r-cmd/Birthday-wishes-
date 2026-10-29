@@ -34,6 +34,8 @@
             cursor: pointer;
             width: 100%;
             max-width: 360px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .gift-box {
             font-size: 85px;
@@ -78,6 +80,11 @@
             padding: 20px 16px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            animation: fadeIn 0.6s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.94); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .date-badge {
@@ -196,9 +203,9 @@
         <source src="Neethanadi-MassTamilan.fm.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="introScreen" onclick="unwrapSurprise()">
+    <div id="introScreen">
         <h1 class="intro-title">A Special Surprise For You ❤️</h1>
-        <p style="font-size: 0.9rem; color: #ffb8d6;">Tap the gift box to open</p>
+        <p style="font-size: 0.9rem; color: #ffb8d6;">Tap anywhere to open</p>
         <div class="gift-box">🎁</div>
         <div class="tap-pill">✨ Tap to Unwrap ✨</div>
     </div>
@@ -218,5 +225,179 @@
 
         <div id="lockToast" class="lock-toast"></div>
 
-        <button id="nextSlideBtn" class="nav-btn" style="display: none;" onclick="
-            
+        <button id="nextSlideBtn" class="nav-btn" style="display: none;" onclick="nextSubSlide()">Next Surprise Wish ➡️</button>
+
+        <p style="font-size: 0.75rem; color: #ffb3cc; margin-top: 10px;">Countdown Calendar (Nov 1 - Nov 12):</p>
+        <div class="dates-scroll" id="chipsBar"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        const dailyData = {
+            1: { date: "NOVEMBER 01", title: "Advance Happy Birthday ❤️", wish: "Advance Happy Birthday 🎂 thangoooo! En iniyavale smile pannite irukanum eppovume ✨", photo: "IMG_20260912_190248_988.jpg", emoji: "🎂 💝 🌸" },
+            2: { date: "NOVEMBER 02", title: "Day 02 Surprise 🕊️", wish: "Advance Happy Birthday mailuu! Unoda cute smile dhaan enakku eppovume special 💖", photo: "IMG_20261004_173219_564.jpg", emoji: "🕊️ ✨ 🌹" },
+            3: { date: "NOVEMBER 03", title: "Day 03 Surprise 🧸", wish: "Advance Happy Birthday kutta! Always be bold, edhukagavum alaugha koodadhu strong girl 💪", photo: "IMG_20261004_173215_500.jpg", emoji: "🧸 🎈 💕" },
+            4: { date: "NOVEMBER 04", title: "Day 04 Surprise 🐥", wish: "Advance Happy Birthday kutta mailu! En cute vaalu neethaan eppodhum 🤭", photo: "IMG_20260912_190314_737.jpg", emoji: "🐥 🎂 💐" },
+            5: { date: "NOVEMBER 05", title: "Day 05 Surprise 🥰", wish: "Advance Happy Birthday chlmm! Unkooda pesumbodhu time poradhey theriyala ✨", photo: "IMG_20261004_173223_727.jpg", emoji: "🥰 💖 🎁" },
+            6: { date: "NOVEMBER 06", title: "Day 06 Surprise 💎", wish: "Advance Happy Birthday en vairam! En life-la kedaicha precious gift neethaan 💎❤️", photo: "IMG_20260912_190248_988.jpg", emoji: "💎 🌹 ✨" },
+            7: { date: "NOVEMBER 07", title: "Day 07 Surprise ✏️", wish: "Advance Happy Birthday pencil! Konjam thadi aana cute-a iruppa la 😜", photo: "IMG_20260912_190305_617.jpg", emoji: "✏️ 🤭 🌸" },
+            8: { date: "NOVEMBER 08", title: "Day 08 Surprise 🌸", wish: "Advance Happy Birthday apsuu! You are genuinely special and very close to my heart 💝", photo: "IMG_20261004_173215_500.jpg", emoji: "🌸 🎂 👑" },
+            9: { date: "NOVEMBER 09", title: "Day 09 Surprise 🙈", wish: "Advance Happy Birthday apseyy! The countdown is getting closer thangom ⏳✨", photo: "IMG_20261004_173219_564.jpg", emoji: "🙈 💖 🎉" },
+            10: { date: "NOVEMBER 10", title: "Day 10 Surprise 🌍", wish: "Advance Happy Birthday to my world! Innum two days dhaan irukku periya surprise-ku 🎁", photo: "IMG_20261004_173223_727.jpg", emoji: "🌍 🌹 🛍️" },
+            11: { date: "NOVEMBER 11", title: "Day 11 Surprise 👑", wish: "Advance Happy Birthday di pondatti! Tomorrow is your big day princess ✨🥰", photo: "IMG_20260912_190256_003.jpg", emoji: "👑 🎊 🥳" }
+        };
+
+        const finaleSlides = [
+            { date: "NOVEMBER 12 🎉 (1/4)", title: "Happy Birthday Thangoo! 🎉", wish: "One more time happy birthday di kutta mailuu! Today is all about you! 🥳💖", photo: "IMG_20261004_173223_727.jpg", emoji: "🎂 💐 ✨" },
+            { date: "NOVEMBER 12 🌸 (2/4)", title: "Always Keep Smiling ✨", wish: "Inime eppome smile pannite irukanum edhukagavum alaugha koodathu because your strong girl ✨💪", photo: "IMG_20261004_173215_500.jpg", emoji: "🌸 👑 💕" },
+            { date: "NOVEMBER 12 🤭 (3/4)", title: "Wait A Minute... 😜", wish: "Wait, connection lost... illa illa unoda cute smile paathu system hang aaiduchu 🤭❤️", photo: "IMG_20261004_173219_564.jpg", emoji: "🙈 💖 ⏳" },
+            { date: "NOVEMBER 12 👑 (4/4)", title: "The Grand Finale 🎁", wish: "Ennala mudinja gift unakku anupiruken, unakku pudikum nu ninaikuren! Many more happy returns of the day thangoooooooooooo 🥳🎉💃💖", photo: "IMG_20260912_190314_737.jpg", emoji: "🥳 🎉 💃 💖" }
+        ];
+
+        let currentFinaleIndex = 0;
+        let isDay12Active = false;
+        let isOpened = false;
+
+        function getUnlockedLimit() {
+            const now = new Date();
+            const month = now.getMonth(); // 10 = November
+            const date = now.getDate();
+
+            if (month < 10) return 1;
+            if (month > 10) return 12;
+            return Math.min(Math.max(date, 1), 12);
+        }
+
+        const myAudio = document.getElementById('bgMusic');
+
+        function updateAudioState(day) {
+            const pill = document.getElementById('musicStatusPill');
+            if (day === 12) {
+                if (pill) pill.classList.add('active-music');
+                if (myAudio) {
+                    try {
+                        myAudio.currentTime = 25;
+                        myAudio.play().catch(() => {});
+                    } catch(e) {}
+                }
+            } else {
+                if (pill) pill.classList.remove('active-music');
+                if (myAudio) {
+                    try {
+                        myAudio.pause();
+                        myAudio.currentTime = 0;
+                    } catch(e) {}
+                }
+            }
+        }
+
+        function unwrapSurprise() {
+            if (isOpened) return;
+            isOpened = true;
+
+            // Direct screen swap first (never blocked)
+            const intro = document.getElementById('introScreen');
+            const main = document.getElementById('mainStage');
+            if (intro) intro.style.display = 'none';
+            if (main) main.style.display = 'block';
+
+            // Safe confetti fire
+            try {
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+                }
+            } catch(e) {}
+
+            const activeDay = getUnlockedLimit();
+            buildChips(activeDay);
+            setDay(activeDay);
+        }
+
+        // Multiple triggers for reliable mobile response
+        const introElem = document.getElementById('introScreen');
+        if (introElem) {
+            introElem.addEventListener('click', unwrapSurprise);
+            introElem.addEventListener('touchend', function(e) {
+                unwrapSurprise();
+            }, { passive: true });
+        }
+
+        function setDay(dayNum) {
+            const toast = document.getElementById('lockToast');
+            if (toast) toast.innerText = '';
+            const nextBtn = document.getElementById('nextSlideBtn');
+
+            updateAudioState(dayNum);
+
+            if (dayNum === 12) {
+                isDay12Active = true;
+                currentFinaleIndex = 0;
+                renderFinale(0);
+                if (nextBtn) nextBtn.style.display = "block";
+                return;
+            }
+
+            isDay12Active = false;
+            if (nextBtn) nextBtn.style.display = "none";
+            const data = dailyData[dayNum];
+            if (!data) return;
+
+            document.getElementById('dateTag').innerText = data.date;
+            document.getElementById('wishTitle').innerText = data.title;
+            document.getElementById('wishText').innerText = data.wish;
+            document.getElementById('wishEmojis').innerText = data.emoji;
+            document.getElementById('mainImg').src = data.photo;
+        }
+
+        function renderFinale(idx) {
+            const slide = finaleSlides[idx];
+            document.getElementById('dateTag').innerText = slide.date;
+            document.getElementById('wishTitle').innerText = slide.title;
+            document.getElementById('wishText').innerText = slide.wish;
+            document.getElementById('wishEmojis').innerText = slide.emoji;
+            document.getElementById('mainImg').src = slide.photo;
+            try {
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+                }
+            } catch(e) {}
+        }
+
+        function nextSubSlide() {
+            if (!isDay12Active) return;
+            currentFinaleIndex = (currentFinaleIndex + 1) % finaleSlides.length;
+            renderFinale(currentFinaleIndex);
+        }
+
+        function buildChips(currentOpenDay) {
+            const bar = document.getElementById('chipsBar');
+            if (!bar) return;
+            bar.innerHTML = '';
+            const limit = getUnlockedLimit();
+
+            for (let d = 1; d <= 12; d++) {
+                let btn = document.createElement('button');
+                const isLocked = d > limit;
+                btn.className = 'd-chip' + (d === currentOpenDay ? ' active' : '') + (isLocked ? ' locked' : '');
+                btn.innerText = (isLocked ? '🔒 ' : '') + 'Nov ' + (d < 10 ? '0' + d : d);
+
+                btn.onclick = function() {
+                    if (d > getUnlockedLimit()) {
+                        const t = document.getElementById('lockToast');
+                        if (t) {
+                            t.innerText = "Innikku idhu open aagadhu di kutta, wait pannu! 🤭🔒";
+                            setTimeout(() => { if (t) t.innerText = ""; }, 2500);
+                        }
+                        return;
+                    }
+                    document.querySelectorAll('.d-chip').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    setDay(d);
+                };
+                bar.appendChild(btn);
+            }
+        }
+    </script>
+</body>
+</html>
+
