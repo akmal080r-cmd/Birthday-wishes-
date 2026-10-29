@@ -6,7 +6,14 @@
     <title>Birthday Surprise For Apsara ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
         html, body {
             width: 100%;
             min-height: 100vh;
@@ -31,20 +38,17 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            cursor: pointer;
             width: 100%;
             max-width: 360px;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
         }
         .gift-box {
             font-size: 85px;
             margin: 15px 0;
             animation: giftBounce 1.8s infinite ease-in-out alternate;
             filter: drop-shadow(0 0 25px rgba(255, 42, 109, 0.8));
-            transition: transform 0.2s;
+            cursor: pointer;
         }
-        .gift-box:active { transform: scale(0.92); }
         @keyframes giftBounce {
             0% { transform: translateY(0) scale(1) rotate(-3deg); }
             100% { transform: translateY(-16px) scale(1.08) rotate(3deg); }
@@ -59,13 +63,18 @@
         .tap-pill {
             background: linear-gradient(135deg, #ff2a6d, #ff5e97);
             color: #fff;
-            padding: 10px 22px;
+            padding: 12px 26px;
             border-radius: 25px;
             font-size: 0.95rem;
             font-weight: 600;
             margin-top: 15px;
             box-shadow: 0 6px 20px rgba(255, 42, 109, 0.5);
+            cursor: pointer;
+            border: none;
+            outline: none;
+            display: inline-block;
         }
+        .tap-pill:active { transform: scale(0.95); }
 
         /* Main Surprise Stage */
         .stage {
@@ -80,11 +89,6 @@
             padding: 20px 16px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            animation: fadeIn 0.6s ease forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.94); }
-            to { opacity: 1; transform: scale(1); }
         }
 
         .date-badge {
@@ -203,11 +207,11 @@
         <source src="Neethanadi-MassTamilan.fm.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="introScreen">
+    <div id="introScreen" onclick="unwrapSurprise()">
         <h1 class="intro-title">A Special Surprise For You ❤️</h1>
-        <p style="font-size: 0.9rem; color: #ffb8d6;">Tap anywhere to open</p>
-        <div class="gift-box">🎁</div>
-        <div class="tap-pill">✨ Tap to Unwrap ✨</div>
+        <p style="font-size: 0.9rem; color: #ffb8d6;">Tap the gift box to open</p>
+        <div class="gift-box" onclick="unwrapSurprise()">🎁</div>
+        <button type="button" class="tap-pill" onclick="unwrapSurprise()">✨ Tap to Unwrap ✨</button>
     </div>
 
     <div id="mainStage" class="stage">
@@ -295,13 +299,9 @@
             if (isOpened) return;
             isOpened = true;
 
-            // Direct screen swap first (never blocked)
-            const intro = document.getElementById('introScreen');
-            const main = document.getElementById('mainStage');
-            if (intro) intro.style.display = 'none';
-            if (main) main.style.display = 'block';
+            document.getElementById('introScreen').style.display = 'none';
+            document.getElementById('mainStage').style.display = 'block';
 
-            // Safe confetti fire
             try {
                 if (typeof confetti === 'function') {
                     confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
@@ -311,15 +311,6 @@
             const activeDay = getUnlockedLimit();
             buildChips(activeDay);
             setDay(activeDay);
-        }
-
-        // Multiple triggers for reliable mobile response
-        const introElem = document.getElementById('introScreen');
-        if (introElem) {
-            introElem.addEventListener('click', unwrapSurprise);
-            introElem.addEventListener('touchend', function(e) {
-                unwrapSurprise();
-            }, { passive: true });
         }
 
         function setDay(dayNum) {
@@ -399,5 +390,5 @@
         }
     </script>
 </body>
-</html>
-
+    </html>
+    
