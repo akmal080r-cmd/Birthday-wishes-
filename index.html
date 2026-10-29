@@ -1,506 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Surprise For Apsara ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            min-height: 100vh;
-            background: radial-gradient(circle at top, #2b082e 0%, #0d0112 100%);
-            font-family: 'Poppins', sans-serif;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 15px 40px;
-            overflow-x: hidden;
-        }
-
-        /* Intro Gift Screen */
-        #introScreen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            cursor: pointer;
-            z-index: 100;
-        }
-        .gift-box {
-            font-size: 85px;
-            margin: 15px 0;
-            animation: giftBounce 1.8s infinite ease-in-out alternate;
-            filter: drop-shadow(0 0 25px rgba(255, 42, 109, 0.8));
-            transition: transform 0.2s;
-        }
-        .gift-box:active { transform: scale(0.92); }
-        @keyframes giftBounce {
-            0% { transform: translateY(0) scale(1) rotate(-3deg); }
-            100% { transform: translateY(-16px) scale(1.08) rotate(3deg); }
-        }
-        .intro-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.3rem;
-            color: #ff5e97;
-            text-shadow: 0 0 15px rgba(255, 94, 151, 0.6);
-            margin-bottom: 8px;
-        }
-        .tap-pill {
-            background: linear-gradient(135deg, #ff2a6d, #ff5e97);
-            color: #fff;
-            padding: 10px 22px;
-            border-radius: 25px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-top: 15px;
-            box-shadow: 0 6px 20px rgba(255, 42, 109, 0.5);
-        }
-
-        /* Main Surprise Stage */
-        .stage {
-            display: none;
-            width: 100%;
-            max-width: 360px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1.5px solid #ff4d88;
-            border-radius: 24px;
-            padding: 20px 16px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            animation: fadeIn 0.8s ease forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.92); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .date-badge {
-            display: inline-block;
-            background: #ff2a6d;
-            color: #fff;
-            padding: 5px 16px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-        }
-        .photo-box {
-            width: 100%;
-            height: 245px;
-            border-radius: 16px;
-            border: 2px solid #ff4d88;
-            background-color: #1a0520;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-        .photo-box img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.7rem;
-            color: #ff5e97;
-            margin-bottom: 6px;
-        }
-        .subtitle {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #ffe6f0;
-            min-height: 55px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .music-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.8rem;
-            color: #ff9ebb;
-            background: rgba(255, 42, 109, 0.15);
-            padding: 4px 14px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 158, 187, 0.3);
-            margin-bottom: 10px;
-        }
-        .nav-btn {
-            background: linear-gradient(135deg, #ff2a6d, #ff5e97);
-            color: #fff;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 8px;
-        }
-        .dates-scroll {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding: 10px 0;
-            margin-top: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            -webkit-overflow-scrolling: touch;
-        }
-        .d-chip {
-            flex: 0 0 auto;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid #ff4d88;
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-        .d-chip.active {
-            background: #ff2a6d;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Audio Player -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="Neethanadi-MassTamilan.fm.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Option 2: Gift Box Unwrap Intro -->
-    <div id="introScreen" onclick="unwrapSurprise()">
-        <h1 class="intro-title">A Special Surprise For You ❤️️</h1>
-        <p style="font-size: 0.9rem; color: #ffb8d6;">Tap the gift box to open</p>
-        <div class="gift-box">🎁</div>
-        <div class="tap-pill">✨ Tap to Unwrap ✨</div>
-    </div>
-
-    <!-- Countdown & Finale Stage -->
-    <div id="mainStage" class="stage">
-        <div id="dateTag" class="date-badge">NOVEMBER 01</div>
-        <div class="photo-box">
-            <img id="mainImg" src="IMG_20260912_190248_988.jpg" alt="Apsara">
-        </div>
-        <h1 id="wishTitle">Advance Happy Birthday ❤️</h1>
-        <div id="wishText" class="subtitle">Advance Happy Birthday 🎂 thangoooo! En iniyavale smile pannite irukanum eppovume ✨</div>
-        <div id="wishEmojis" style="font-size: 26px; margin-bottom: 6px;">🎂 💝 🌸</div>
-        
-        <div class="music-pill">
-            <span>🎶 Neethanadi Playing...</span>
-        </div>
-
-        <button id="nextSlideBtn" class="nav-btn" style="display: none;" onclick="nextSubSlide()">Next Surprise Wish ➡️</button>
-
-        <p style="font-size: 0.75rem; color: #ffb3cc; margin-top: 12px;">Countdown Calendar (Nov 1 - Nov 12):</p>
-        <div class="dates-scroll" id="chipsBar"></div>
-    </div>
-
-    <!-- Confetti Library -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-    <script>
-        const dailyData = {
-            1: { date: "NOVEMBER 01", title: "Advance Happy Birthday ❤️", wish: "Advance Happy Birthday 🎂 thangoooo! En iniyavale smile pannite irukanum eppovume ✨", photo: "IMG_20260912_190248_988.jpg", emoji: "🎂 💝 🌸" },
-            2: { date: "NOVEMBER 02", title: "Day 02 Surprise 🕊️", wish: "Advance Happy Birthday mailuu! Unoda cute smile dhaan enakku eppovume special 💖", photo: "IMG_20261004_173219_564.jpg", emoji: "🕊️ ✨ 🌹" },
-            3: { date: "NOVEMBER 03", title: "Day 03 Surprise 🧸", wish: "Advance Happy Birthday kutta! Always be bold, edhukagavum alaugha koodadhu strong girl 💪", photo: "IMG_20261004_173215_500.jpg", emoji: "🧸 🎈 💕" },
-            4: { date: "NOVEMBER 04", title: "Day 04 Surprise 🐥", wish: "Advance Happy Birthday kutta mailu! En cute vaalu neethaan eppodhum 🤭", photo: "IMG_20260912_190314_737.jpg", emoji: "🐥 🎂 💐" },
-            5: { date: "NOVEMBER 05", title: "Day 05 Surprise 🥰", wish: "Advance Happy Birthday chlmm! Unkooda pesumbodhu time poradhey theriyala ✨", photo: "IMG_20261004_173223_727.jpg", emoji: "🥰 💖 🎁" },
-            6: { date: "NOVEMBER 06", title: "Day 06 Surprise 💎", wish: "Advance Happy Birthday en vairam! En life-la kedaicha precious gift neethaan 💎❤️️", photo: "IMG_20260912_190248_988.jpg", emoji: "💎 🌹 ✨" },
-            7: { date: "NOVEMBER 07", title: "Day 07 Surprise ✏️", wish: "Advance Happy Birthday pencil! Konjam thadi aana cute-a iruppa la 😜", photo: "IMG_20260912_190305_617.jpg", emoji: "✏️ 🤭 🌸" },
-            8: { date: "NOVEMBER 08", title: "Day 08 Surprise 🌸", wish: "Advance Happy Birthday apsuu! You are genuinely special and very close to my heart 💝", photo: "IMG_20261004_173215_500.jpg", emoji: "🌸 🎂 👑" },
-            9: { date: "NOVEMBER 09", title: "Day 09 Surprise 🙈", wish: "Advance Happy Birthday apseyy! The countdown is getting closer thangom ⏳✨", photo: "IMG_20261004_173219_564.jpg", emoji: "🙈 💖 🎉" },
-            10: { date: "NOVEMBER 10", title: "Day 10 Surprise 🌍", wish: "Advance Happy Birthday to my world! Innum two days dhaan irukku periya surprise-ku 🎁", photo: "IMG_20261004_173223_727.jpg", emoji: "🌍 🌹 🛍️" },
-            11: { date: "NOVEMBER 11", title: "Day 11 Surprise 👑", wish: "Advance Happy Birthday di pondatti! Tomorrow is your big day princess ✨🥰", photo: "IMG_20260912_190256_003.jpg", emoji: "👑 🎊 🥳" }
-        };
-
-        const finaleSlides = [
-            { date: "NOVEMBER 12 🎉 (1/4)", title: "Happy Birthday Thangoo! 🎉", wish: "One more time happy birthday di kutta mailuu! Today is all about you! 🥳💖", photo: "IMG_20261004_173223_727.jpg", emoji: "🎂 💐 ✨" },
-            { date: "NOVEMBER 12 🌸 (2/4)", title: "Always Keep Smiling ✨", wish: "Inime eppome smile pannite irukanum edhukagavum alaugha koodathu because your strong girl ✨💪", photo: "IMG_20261004_173215_500.jpg", emoji: "🌸 👑 💕" },
-            { date: "NOVEMBER 12 🤭 (3/4)", title: "Wait A Minute... 😜", wish: "Wait, connection lost... illa illa unoda cute smile paathu system hang aaiduchu 🤭❤️", photo: "IMG_20261004_173219_564.jpg", emoji: "🙈 💖 ⏳" },
-            { date: "NOVEMBER 12 👑 (4/4)", title: "The Grand Finale 🎁", wish: "Ennala mudinja gift unakku anupiruken, unakku pudikum nu ninaikuren! Many more happy returns of the day thangoooooooooooo 🥳🎉💃💖", photo: "IMG_20260912_190314_737.jpg", emoji: "🥳 🎉 💃 💖" }
-        ];
-
-        let currentFinaleIndex = 0;
-        let isDay12Active = false;
-
-        function unwrapSurprise() {
-            // 1. Play Song from 25th second instantly
-            const music = document.getElementById('bgMusic');
-            try {
-                music.currentTime = 25;
-                music.play().catch(() => music.play());
-            } catch(e) {}
-
-            // 2. Blast fireworks
-            blastConfetti();
-
-            // 3. Smooth transition to countdown stage
-            document.getElementById('introScreen').style.display = 'none';
-            document.getElementById('mainStage').style.display = 'block';
-
-            // 4. Render day 1
-            buildChips();
-            setDay(1);
-        }
-
-        function setDay(dayNum) {
-            const nextBtn = document.getElementById('nextSlideBtn');
-            if (dayNum === 12) {
-                isDay12Active = true;
-                currentFinaleIndex = 0;
-                renderFinale(0);
-                nextBtn.style.display = "block";
-                return;
-            }
-
-            isDay12Active = false;
-            nextBtn.style.display = "none";
-            const data = dailyData[dayNum];
-            if (!data) return;
-
-            document.getElementById('dateTag').innerText = data.date;
-            document.getElementById('wishTitle').innerText = data.title;
-            document.getElementById('wishText').innerText = data.wish;
-            document.getElementById('wishEmojis').innerText = data.emoji;
-            document.getElementById('mainImg').src = data.photo;
-        }
-
-        function renderFinale(idx) {
-            const slide = finaleSlides[idx];
-            document.getElementById('dateTag').innerText = slide.date;
-            document.getElementById('wishTitle').innerText = slide.title;
-            document.getElementById('wishText').innerText = slide.wish;
-            document.getElementById('wishEmojis').innerText = slide.emoji;
-            document.getElementById('mainImg').src = slide.photo;
-            blastConfetti();
-        }
-
-        function nextSubSlide() {
-            if (!isDay12Active) return;
-            currentFinaleIndex = (currentFinaleIndex + 1) % finaleSlides.length;
-            renderFinale(currentFinaleIndex);
-        }
-
-        function buildChips() {
-            const bar = document.getElementById('chipsBar');
-            bar.innerHTML = '';
-            for (let d = 1; d <= 12; d++) {
-                let btn = document.createElement('button');
-                btn.className = 'd-chip' + (d === 1 ? ' active' : '');
-                btn.innerText = 'Nov ' + (d < 10 ? '0' + d : d);
-                btn.onclick = function() {
-                    document.querySelectorAll('.d-chip').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    setDay(d);
-                };
-                bar.appendChild(btn);
-            }
-        }
-
-        function blastConfetti() {
-            if (typeof confetti === 'function') {
-                confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
-            }
-        }
-    </script>
-</body>
-</html>
-<!-- REAL-TIME AUTOMATIC DATE LOCK OVERRIDE -->
+<!-- NOV 12 ONLY AUDIO ENGINE + HIDE SONG ON OTHER DAYS + DATE LOCK -->
 <style>
-    .d-chip.locked {
-        opacity: 0.38 !important;
-        border-color: #555 !important;
-        background: rgba(0, 0, 0, 0.4) !important;
+    /* Song status pill badge hidden on normal days */
+    .music-pill, #musicBtn, #musicActionBtn {
+        display: none !important;
     }
-    #lockToastMsg {
-        color: #ffb3cc;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-top: 6px;
-        min-height: 20px;
-        text-align: center;
+    /* Shows only on Nov 12 */
+    .show-on-finale {
+        display: inline-flex !important;
     }
-</style>
-
-<script>
-(function() {
-    // 1. Innikku date calculation (Nov 1 to Nov 12 real-time lock)
-    function getTodayLockLimit() {
-        const today = new Date();
-        const month = today.getMonth(); // 10 = November
-        const date = today.getDate();
-
-        // November-ku munnadi irundha Day 1 mattum open for testing
-        if (month < 10) return 1;
-        // November mudinjadhum all unlocked
-        if (month > 10) return 12;
-        // November nadakkumbodhu strictly inniku date varaikkum mattum unlock
-        return Math.min(Math.max(date, 1), 12);
-    }
-
-    // 2. Add Lock Toast Container
-    let tBox = document.getElementById('lockToastMsg');
-    if (!tBox) {
-        tBox = document.createElement('div');
-        tBox.id = 'lockToastMsg';
-        const musicPill = document.querySelector('.music-pill') || document.getElementById('musicBtn');
-        if (musicPill && musicPill.parentNode) {
-            musicPill.parentNode.insertBefore(tBox, musicPill.nextSibling);
-        }
-    }
-
-    // 3. Re-lock Nov 01 to Nov 12 Chips
-    function applySmartLock() {
-        const limit = getTodayLockLimit();
-        const allChips = document.querySelectorAll('.d-chip');
-
-        allChips.forEach((btn, index) => {
-            const dayNum = index + 1;
-            const isLocked = dayNum > limit;
-
-            if (isLocked) {
-                btn.classList.add('locked');
-                if (!btn.innerText.includes('🔒')) {
-                    btn.innerText = '🔒 ' + btn.innerText;
-                }
-            } else {
-                btn.classList.remove('locked');
-            }
-
-            // Click interceptor for locked days
-            btn.onclick = function(e) {
-                if (dayNum > getTodayLockLimit()) {
-                    e.stopImmediatePropagation();
-                    tBox.innerText = "Innikku idhu open aagadhu di kutta, wait pannu! 🤭🔒";
-                    setTimeout(() => { tBox.innerText = ""; }, 3500);
-                    return false;
-                }
-                tBox.innerText = "";
-                document.querySelectorAll('.d-chip').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                if (typeof setDay === 'function') setDay(dayNum);
-            };
-        });
-    }
-
-    // Apply lock once chips are ready
-    setTimeout(applySmartLock, 300);
-    // Extra safety trigger if gift box was used
-    window.addEventListener('click', () => { setTimeout(applySmartLock, 200); }, { once: true });
-})();
-</script>
-<!-- BULLETPROOF ZERO-BYPASS DATE LOCK -->
-<style>
-    .d-chip.locked, .r-chip.locked {
-        opacity: 0.35 !important;
-        border-color: #555 !important;
-        background: rgba(0, 0, 0, 0.45) !important;
-        cursor: not-allowed !important;
-    }
-    #lockToastMsg {
-        color: #ffb3cc;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin: 6px auto;
-        min-height: 22px;
-        text-align: center;
-        display: block;
-    }
-</style>
-
-<script>
-(function() {
-    function getTodayLockLimit() {
-        const today = new Date();
-        const month = today.getMonth(); // 10 = November
-        const date = today.getDate();
-
-        // Innikku October (month < 10) -> Strictly Day 1 mattum test-kku open
-        if (month < 10) return 1;
-        // November mudinjadhum -> all 12 days open
-        if (month > 10) return 12;
-        // November 1-12 nadakkumbodhu -> andha andha date varai mattum open
-        return Math.min(Math.max(date, 1), 12);
-    }
-
-    function enforceLock() {
-        const limit = getTodayLockLimit();
-        const chips = document.querySelectorAll('.d-chip, .r-chip');
-
-        // Add toast container if missing
-        let tBox = document.getElementById('lockToastMsg');
-        if (!tBox) {
-            tBox = document.createElement('div');
-            tBox.id = 'lockToastMsg';
-            const target = document.querySelector('.music-pill') || document.getElementById('musicBtn') || document.getElementById('chipsBar');
-            if (target && target.parentNode) {
-                target.parentNode.insertBefore(tBox, target);
-            }
-        }
-
-        chips.forEach((btn, index) => {
-            const dayNum = index + 1;
-            if (dayNum > limit) {
-                btn.classList.add('locked');
-                btn.classList.remove('active');
-                if (!btn.innerText.includes('🔒')) {
-                    btn.innerText = '🔒 ' + btn.innerText.replace('🔒', '').trim();
-                }
-            } else {
-                btn.classList.remove('locked');
-            }
-        });
-    }
-
-    // Capture phase listener (pazhaya code click-ai idhu total-a block pannum)
-    document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.d-chip, .r-chip');
-        if (!btn) return;
-
-        const limit = getTodayLockLimit();
-        const allChips = Array.from(document.querySelectorAll('.d-chip, .r-chip'));
-        const dayNum = allChips.indexOf(btn) + 1;
-
-        if (dayNum > limit) {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-
-            let tBox = document.getElementById('lockToastMsg');
-            if (tBox) {
-                tBox.innerText = "Innikku idhu open aagadhu di kutta, wait pannu! 🤭🔒";
-                setTimeout(() => { if (tBox) tBox.innerText = ""; }, 3000);
-            }
-            return false;
-        }
-    }, true);
-
-    // Keep applying lock even after gift unwrap or rerender
-    setInterval(enforceLock, 400);
-})();
-</script>
-<!-- GUARANTEED LOCK OVERRIDE -->
-<style>
     .d-chip.is-locked, .r-chip.is-locked {
         opacity: 0.35 !important;
         border-color: #555 !important;
         background: rgba(0, 0, 0, 0.5) !important;
         cursor: not-allowed !important;
-        pointer-events: auto !important;
     }
     #lockToastMsg {
         color: #ffb3cc;
@@ -520,10 +32,52 @@
         const month = today.getMonth(); // 10 = November
         const date = today.getDate();
 
-        // October-la irundha strictly Nov 1 mattum testing-kku open
         if (month < 10) return 1;
         if (month > 10) return 12;
         return Math.min(Math.max(date, 1), 12);
+    }
+
+    const myAudio = document.getElementById('bgMusic') || document.querySelector('audio');
+
+    // Control audio strictly based on day
+    function handleMusicVisibility(activeDay) {
+        const pill = document.querySelector('.music-pill') || document.getElementById('musicBtn') || document.getElementById('musicActionBtn');
+        
+        if (activeDay === 12) {
+            // Nov 12 Grand Finale: Show pill and play song
+            if (pill) {
+                pill.classList.add('show-on-finale');
+                pill.innerHTML = '<span>🎶 Neethanadi Playing...</span>';
+            }
+            if (myAudio) {
+                try {
+                    myAudio.currentTime = 25;
+                    myAudio.play().catch(() => {});
+                } catch(e) {}
+            }
+        } else {
+            // Days 1 to 11: Mute/Pause audio and hide badge completely
+            if (pill) {
+                pill.classList.remove('show-on-finale');
+                pill.style.display = 'none';
+            }
+            if (myAudio) {
+                try {
+                    myAudio.pause();
+                    myAudio.currentTime = 0;
+                } catch(e) {}
+            }
+        }
+    }
+
+    // Stop auto-play immediately when gift box unwrap happens
+    const origUnwrap = window.unwrapSurprise;
+    if (typeof origUnwrap === 'function') {
+        window.unwrapSurprise = function() {
+            origUnwrap();
+            const currentActiveDay = getTodayLockLimit();
+            handleMusicVisibility(currentActiveDay);
+        };
     }
 
     function createToast() {
@@ -548,14 +102,12 @@
             const dayNum = index + 1;
 
             if (dayNum > limit) {
-                // 1. Visual lock
                 btn.classList.add('is-locked');
                 btn.classList.remove('active');
                 if (!btn.innerText.includes('🔒')) {
                     btn.innerText = '🔒 ' + btn.innerText.replace('🔒', '').trim();
                 }
 
-                // 2. Direct hard overwrite of the click action
                 btn.onclick = function(e) {
                     if (e) {
                         e.preventDefault();
@@ -568,12 +120,19 @@
                     }
                     return false;
                 };
+            } else {
+                // For unlocked allowed days: trigger music check on tab switch
+                const oldClick = btn.onclick;
+                btn.onclick = function(e) {
+                    if (typeof oldClick === 'function') oldClick.call(this, e);
+                    handleMusicVisibility(dayNum);
+                };
             }
         });
     }
 
-    // Run repeatedly to catch any DOM redraws after gift unwrap
+    // Initial check
     setInterval(freezeLockedDays, 250);
+    handleMusicVisibility(getTodayLockLimit());
 })();
 </script>
-
